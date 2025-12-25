@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Voice Note Web</title>
+    <style>
+        :root { --bg: #030610; --accent: #00ffc8; --text: #fff; }
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; height: 100vh; margin: 0; display: flex; flex-direction: column; }
+        header { padding: 15px; text-align: center; border-bottom: 1px solid rgba(0,255,200,0.2); }
+        #transcript { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg { background: rgba(0,255,200,0.1); padding: 10px; border-radius: 4px; border-left: 3px solid var(--accent); }
+        .partial { opacity: 0.5; border-left-color: #666; }
+        #controls { height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); }
+        button { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--accent); background: none; color: var(--accent); font-size: 24px; cursor: pointer; }
+        button.recording { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent); }
+        button:disabled { border-color: #444; color: #444; }
+        #status { font-size: 12px; margin-bottom: 10px; opacity: 0.7; }
+    </style>
+    <!-- Use CDN for vosk.js since local download failed -->
+    <script src="https://cdn.jsdelivr.net/npm/vosk-browser@0.0.8/dist/vosk.js"></script>
+</head>
+<body>
+<header><h2>VOICE NOTE WEB</h2></header>
+<div id="transcript"></div>
+<div id="controls">
+    <div id="status">Initializing...</div>
+    <button id="btn" disabled>🎤</button>
+</div>
+
+<script>
+    const btn = document.getElementById('btn');
+    const status = document.getElementById('status');
+    const transcript = document.getElementById('transcript');
+    
+    // We create a Blob for the worker to avoid CORS issues with local files or CDN loading in worker
+    // Note: vosk-browser usually handles this, but here we manually set it up for clarity
+    const workerCode = `
+        // Import vosk from CDN inside worker
+        importScripts('https://cdn.jsdelivr.net/npm/vosk-browser@0.0.8/dist/vosk.js');
+
+        let model = null;
+        let recognizer = null;
+
+        onmessage = async function(e) {
+            if (e.data.action === 'init') {
+                try {
+                    // Load Model from relative path
+                    // Note: 'model' folder must be served correctly
+                    model = await Vosk.createModel(e.data.modelUrl);
+                    recognizer = new Vosk.Recognizer({model: model, sampleRate: e.data.sampleRate});
+                    postMessage({ status: 'ready' });
+                } catch (err) {
+                    postMessage({ status: 'error', data: err.toString() });
+                }
+            }
+            
+            if (e.data.action === 'process') {
+                if (recognizer) {
+                    try {
+                        const isFinal = recognizer.acceptWaveform(e.data.buffer);
+                        if (isFinal) {
+                            postMessage({ status: 'result', data: recognizer.result() });
+                        } else {
+                            postMessage({ status: 'partial', data: recognizer.partialResult() });
+                        }
+                    } catch (err) {
+                        // console.error(err);
+                    }
+                }
+            }
+        }
+    `;
+
+    const blob = new Blob([workerCode], {type: 'application/javascript'});
+    const workerUrl = URL.createObjectURL(blob);
+    let worker = new Worker(workerUrl);
+
+    let audioCtx, scriptNode, source;
+    let isRecording = false;
+
+    // 1. Initialize Worker
+    worker.onmessage = (e) => {
+        if (e.data.status === 'ready') {
+            status.textContent = "Ready (Model Loaded)";
+            btn.disabled = false;
+        }
+        if (e.data.status === 'result') {
+            addMsg(e.data.data.text, false);
+        }
+        if (e.data.status === 'partial') {
+            addMsg(e.data.data.partial, true);
+        }
+        if (e.data.status === 'error') {
+            status.textContent = "Error: " + e.data.data;
+        }
+    };
+
+    // Start loading model immediately
+    status.textContent = "Downloading Model (40MB)...";
+    worker.postMessage({
+        action: 'init',
+        modelUrl: 'model', // Relative path to model folder
+        sampleRate: 16000
+    });
+
+    // 2. Audio Handling
+    async function startMic() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+            source = audioCtx.createMediaStreamSource(stream);
+            
+            scriptNode = audioCtx.createScriptProcessor(4096, 1, 1);
+            
+            scriptNode.onaudioprocess = (e) => {
+                if (!isRecording) return;
+                worker.postMessage({
+                    action: 'process',
+                    buffer: e.inputBuffer.getChannelData(0)
+                });
+            };
+            
+            source.connect(scriptNode);
+            scriptNode.connect(audioCtx.destination);
+            
+            isRecording = true;
+            btn.classList.add('recording');
+            status.textContent = "Listening...";
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+    function stopMic() {
+        isRecording = false;
+        btn.classList.remove('recording');
+        status.textContent = "Ready";
+        if (source) source.disconnect();
+        if (scriptNode) scriptNode.disconnect();
+        if (audioCtx) audioCtx.close();
+    }
+
+    btn.onclick = () => {
+        if (isRecording) stopMic();
+        else startMic();
+    };
+
+    function addMsg(text, isPartial) {
+        if (!text) return;
+        const last = transcript.lastElementChild;
+        if (last && last.classList.contains('partial')) last.remove();
+        
+        const div = document.createElement('div');
+        div.className = isPartial ? 'msg partial' : 'msg';
+        div.textContent = text;
+        transcript.appendChild(div);
+        transcript.scrollTop = transcript.scrollHeight;
+    }
+</script>
+</body>
+</html>
