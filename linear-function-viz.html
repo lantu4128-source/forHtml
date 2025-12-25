@@ -19,12 +19,18 @@
             margin: 0;
             padding: 0;
             user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        /* 允许输入框被选中和编辑 */
+        input {
+            user-select: auto !important;
+            -webkit-user-select: auto !important;
         }
 
         body {
             background-color: var(--bg-color);
             color: #fff;
-            /* 优先使用 Space Grotesk 显示数字，中文使用系统黑体 */
             font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
             height: 100vh;
             overflow: hidden;
@@ -162,6 +168,26 @@
             pointer-events: none;
             z-index: 20;
         }
+
+        /* 浮动输入框 */
+        #editInput {
+            position: absolute;
+            display: none;
+            background: rgba(10, 10, 10, 0.9);
+            border: 1px solid var(--secondary-color);
+            color: #fff;
+            font-family: 'Space Grotesk', 'PingFang SC', sans-serif;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 4px;
+            outline: none;
+            z-index: 100;
+            padding: 0 5px;
+            margin: 0;
+            transform: translate(0, -50%); /* 垂直居中，水平靠右对齐锚点 */
+            pointer-events: auto; /* 确保可点击 */
+            box-shadow: 0 0 10px var(--secondary-color);
+        }
     </style>
 </head>
 <body>
@@ -180,12 +206,12 @@
     <div class="canvas-container" id="container">
         <canvas id="canvas"></canvas>
         <div class="vignette"></div>
+        <input type="text" id="editInput">
     </div>
     
-    <div class="hint">拖动圆点 (0-10) · 拖动背景平移</div>
+    <div class="hint">拖动圆点 (0-10) · 点击变量名编辑 · 拖动背景平移</div>
 
     <script>
-        // 精选益智/休闲游戏名列表 (0-10)
         const GAMES = [
             "扫雷", 
             "2048", 
@@ -206,21 +232,27 @@
         const modeSwitch = document.getElementById('modeSwitch');
         const labelNum = document.getElementById('label-num');
         const labelGame = document.getElementById('label-game');
+        const editInput = document.getElementById('editInput');
 
         // 状态变量
-        let currentX = 5.0; // 初始值设为中间
+        let currentX = 5.0; 
         let viewOffsetX = 0;
         let isGameMode = false;
+        let variableName = "x"; // 变量名，可编辑
         
-        // 拖拽状态
+        // 拖拽与交互状态
         let isDraggingPoint = false;
         let isDraggingView = false;
+        let isEditing = false;
         let lastPointerX = 0;
+        
+        // 记录可点击区域
+        let lastLabelRect = { x: 0, y: 0, w: 0, h: 0 };
         
         // 布局与配置
         let width, height, originY;
         const CONFIG = {
-            scale: 150, // 放大比例，因为只有10个单位，间距要大一些才好看
+            scale: 150, 
             minVal: 0,
             maxVal: 10,
             pointRadius: 10,
@@ -248,16 +280,27 @@
             // 切换开关
             modeSwitch.addEventListener('change', (e) => {
                 isGameMode = e.target.checked;
-                // UI 状态切换
                 if (isGameMode) {
                     labelGame.classList.add('active');
                     labelNum.classList.remove('active');
+                    currentX = Math.round(currentX);
                 } else {
                     labelGame.classList.remove('active');
                     labelNum.classList.add('active');
                 }
                 draw();
             });
+            
+            // 输入框事件 - 阻止冒泡非常重要
+            editInput.addEventListener('mousedown', (e) => e.stopPropagation());
+            editInput.addEventListener('touchstart', (e) => e.stopPropagation());
+            
+            editInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') finishEditing();
+                if (e.key === 'Escape') cancelEditing();
+                e.stopPropagation();
+            });
+            editInput.addEventListener('blur', finishEditing);
             
             centerViewOn(currentX);
         }
@@ -298,10 +341,78 @@
             };
         }
 
+        // 开始编辑变量名
+        function startEditing() {
+            if (isEditing) return; // 防止重复触发
+            isEditing = true;
+            isDraggingPoint = false;
+            isDraggingView = false; // 确保不处于拖拽背景状态
+            
+            // 设置输入框样式
+            editInput.style.fontSize = '24px';
+            editInput.style.height = '34px';
+            
+            // 计算文字宽度以调整输入框宽度
+            ctx.font = "bold 24px 'Space Grotesk', 'PingFang SC', sans-serif";
+            const metrics = ctx.measureText(variableName);
+            const inputW = Math.max(60, metrics.width + 30);
+            editInput.style.width = inputW + 'px';
+            
+            // 定位：垂直居中
+            const centerY = lastLabelRect.y + lastLabelRect.h / 2;
+            
+            // 确保输入框位置准确
+            editInput.style.left = lastLabelRect.x + 'px';
+            editInput.style.top = centerY + 'px';
+            editInput.style.transform = 'translate(0, -50%)'; 
+            
+            editInput.value = variableName;
+            editInput.style.display = 'block';
+            
+            // 延时聚焦，确保 display: block 生效
+            requestAnimationFrame(() => {
+                editInput.focus();
+                editInput.select();
+            });
+        }
+
+        function finishEditing() {
+            if (!isEditing) return;
+            isEditing = false;
+            editInput.style.display = 'none';
+            
+            const val = editInput.value.trim();
+            if (val) {
+                variableName = val;
+            }
+            draw();
+        }
+
+        function cancelEditing() {
+            isEditing = false;
+            editInput.style.display = 'none';
+            draw();
+        }
+
         function onPointerDown(e) {
+            // 如果正在编辑，点击别处会触发 blur -> finishEditing
+            if (isEditing) return;
+
             const { x, y } = getPointerPos(e);
+            
+            // 1. 检测是否点击了左侧标签 (x =)
+            // 大幅扩大判定范围，确保容易点中
+            const pad = 20; 
+            if (x >= lastLabelRect.x - pad && x <= lastLabelRect.x + lastLabelRect.w + pad &&
+                y >= lastLabelRect.y - pad && y <= lastLabelRect.y + lastLabelRect.h + pad) {
+                e.preventDefault(); // 防止触发其他默认行为
+                startEditing();
+                return;
+            }
+
             lastPointerX = x;
             
+            // 2. 检测是否点击了圆点
             const pointCx = valToCanvas(currentX);
             const pointCy = originY;
             const dist = Math.sqrt((x - pointCx)**2 + (y - pointCy)**2);
@@ -316,55 +427,64 @@
         }
 
         function onPointerMove(e) {
+            if (isEditing) return;
+
+            const { x, y } = getPointerPos(e);
+            
+            // 悬停提示
+            // 检查标签
+            const pad = 20;
+            if (x >= lastLabelRect.x - pad && x <= lastLabelRect.x + lastLabelRect.w + pad &&
+                y >= lastLabelRect.y - pad && y <= lastLabelRect.y + lastLabelRect.h + pad) {
+                container.style.cursor = 'text'; // 明确的文本输入光标
+                return;
+            }
+
+            const pointCx = valToCanvas(currentX);
+            const pointCy = originY;
+            const dist = Math.sqrt((x - pointCx)**2 + (y - pointCy)**2);
+            
             if (!isDraggingPoint && !isDraggingView) {
-                const { x, y } = getPointerPos(e);
-                const pointCx = valToCanvas(currentX);
-                const pointCy = originY;
-                const dist = Math.sqrt((x - pointCx)**2 + (y - pointCy)**2);
-                
                 if (dist < CONFIG.hitRadius * 1.5) {
                     container.style.cursor = 'grab';
                 } else {
                     container.style.cursor = 'grab';
                 }
-                return;
             }
             
-            e.preventDefault();
-            const { x } = getPointerPos(e);
-            const deltaX = x - lastPointerX;
-            
-            if (isDraggingPoint) {
-                let newVal = canvasToVal(x);
-                newVal = Math.max(CONFIG.minVal, Math.min(CONFIG.maxVal, newVal));
+            if (isDraggingPoint || isDraggingView) {
+                e.preventDefault();
+                const deltaX = x - lastPointerX;
                 
-                // 磁吸
-                const rounded = Math.round(newVal);
-                // 范围变小了，磁吸区域可以相对宽松一点
-                const magnetStrength = isGameMode ? 0.35 : 0.15;
-                if (Math.abs(newVal - rounded) < magnetStrength) {
-                    newVal = rounded;
+                if (isDraggingPoint) {
+                    let newVal = canvasToVal(x);
+                    newVal = Math.max(CONFIG.minVal, Math.min(CONFIG.maxVal, newVal));
+                    
+                    const rounded = Math.round(newVal);
+                    const magnetStrength = isGameMode ? 0.35 : 0.15;
+                    if (Math.abs(newVal - rounded) < magnetStrength) {
+                        newVal = rounded;
+                    }
+                    
+                    currentX = newVal;
+                    
+                    const screenEdgeBuffer = 80;
+                    if (x < screenEdgeBuffer) {
+                        viewOffsetX += 8;
+                    } else if (x > width - screenEdgeBuffer) {
+                        viewOffsetX -= 8;
+                    }
+                } else if (isDraggingView) {
+                    viewOffsetX += deltaX;
                 }
                 
-                currentX = newVal;
-                
-                // 边缘滚动
-                const screenEdgeBuffer = 80;
-                if (x < screenEdgeBuffer) {
-                    viewOffsetX += 8;
-                } else if (x > width - screenEdgeBuffer) {
-                    viewOffsetX -= 8;
-                }
-                
-            } else if (isDraggingView) {
-                viewOffsetX += deltaX;
+                lastPointerX = x;
+                draw();
             }
-            
-            lastPointerX = x;
-            draw();
         }
 
         function onPointerUp() {
+            if (isEditing) return;
             isDraggingPoint = false;
             isDraggingView = false;
             container.style.cursor = 'grab';
@@ -372,7 +492,6 @@
 
         function draw() {
             ctx.clearRect(0, 0, width, height);
-            
             drawGrid();
             drawAxisLines();
             drawPointAndLabel(currentX);
@@ -395,7 +514,6 @@
         }
         
         function drawAxisLines() {
-            // 底线
             ctx.beginPath();
             ctx.strokeStyle = CONFIG.dimColor;
             ctx.lineWidth = 2;
@@ -403,7 +521,6 @@
             ctx.lineTo(width, originY);
             ctx.stroke();
             
-            // 有效范围线 (0-10)
             const x0 = valToCanvas(CONFIG.minVal);
             const x10 = valToCanvas(CONFIG.maxVal);
             
@@ -417,10 +534,8 @@
             ctx.stroke();
             ctx.shadowBlur = 0;
 
-            // 刻度绘制
             const startVisible = Math.floor(canvasToVal(0));
             const endVisible = Math.ceil(canvasToVal(width));
-            
             const loopStart = Math.max(startVisible, CONFIG.minVal - 1);
             const loopEnd = Math.min(endVisible, CONFIG.maxVal + 1);
 
@@ -432,7 +547,6 @@
                 const x = valToCanvas(i);
                 const isMainRange = i >= CONFIG.minVal && i <= CONFIG.maxVal;
                 
-                // 1. 刻度线
                 ctx.beginPath();
                 if (isMainRange) {
                     ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
@@ -446,20 +560,14 @@
                 ctx.lineTo(x, originY + 8);
                 ctx.stroke();
 
-                // 2. 刻度文字
-                // 只有 0-10，每个都显示
                 const showLabel = true;
-                
                 if (showLabel) {
                     if (isMainRange) {
                         ctx.fillText(i, x, originY + 18);
-                    } else {
-                        // 范围外的不显示或者淡显示，这里选择不显示以聚焦 0-10
                     }
                 }
             }
             
-            // 边界竖线
             ctx.strokeStyle = CONFIG.mainColor;
             ctx.lineWidth = 3;
             
@@ -478,20 +586,18 @@
             const cx = valToCanvas(val);
             const cy = originY;
             
-            // 增大高度和尺寸
-            const labelHeight = 70; // 连线更长
+            const labelHeight = 70;
             const labelY = cy - labelHeight;
 
-            // 1. 连接线
+            // 连接线
             ctx.beginPath();
             ctx.strokeStyle = CONFIG.mainColor;
             ctx.lineWidth = 2;
             ctx.moveTo(cx, cy);
-            ctx.lineTo(cx, labelY + 28); // 留出方框下方的空隙
+            ctx.lineTo(cx, labelY + 28);
             ctx.stroke();
 
-            // 2. 圆点 (参考图样式)
-            // 实心点
+            // 圆点
             ctx.beginPath();
             ctx.fillStyle = CONFIG.mainColor;
             ctx.shadowBlur = 15;
@@ -500,7 +606,6 @@
             ctx.fill();
             ctx.shadowBlur = 0;
             
-            // 外圈描边 (白色光环)
             ctx.beginPath();
             ctx.strokeStyle = '#fff';
             ctx.lineWidth = 3;
@@ -522,65 +627,90 @@
                 subText = "数值";
             }
 
-            // 字体设置
-            const mainFontSize = isGameMode ? 32 : 48; // 数字大一些
-            // 确保数字用 Space Grotesk，中文用黑体
+            const mainFontSize = isGameMode ? 32 : 48;
             ctx.font = `bold ${mainFontSize}px 'Space Grotesk', 'PingFang SC', sans-serif`;
             
             const textMetrics = ctx.measureText(displayText);
             let boxW = textMetrics.width + 50;
-            if (boxW < 140) boxW = 140; // 最小宽度
+            if (boxW < 140) boxW = 140;
             
-            const boxH = isGameMode ? 70 : 70;
+            const boxH = 70;
             const boxX = cx - boxW / 2;
             const boxYPos = labelY - boxH;
 
-            // 方框背景 (深色半透明)
+            // 方框背景
             ctx.fillStyle = 'rgba(20, 20, 20, 0.85)';
             ctx.strokeStyle = CONFIG.mainColor;
             ctx.lineWidth = 2;
             
-            // 发光边框
             ctx.shadowBlur = 10;
             ctx.shadowColor = CONFIG.mainColor;
             
-            // 绘制方框
             roundRect(ctx, boxX, boxYPos, boxW, boxH, 6);
             ctx.fill();
             ctx.stroke();
-            ctx.shadowBlur = 0; // 关掉阴影
+            ctx.shadowBlur = 0;
 
             // ---------------------
             // 绘制内容
             // ---------------------
             ctx.textBaseline = 'middle';
             
-            // 1. 绘制左侧的 x =
-            const xLabel = "x =";
-            ctx.font = "bold 24px 'Space Grotesk', sans-serif";
+            // 1. 绘制左侧的 x = (现在是变量名，可编辑)
+            ctx.font = "bold 24px 'Space Grotesk', 'PingFang SC', sans-serif";
+            const labelText = variableName + " =";
+            const labelMetrics = ctx.measureText(labelText);
+            
+            // 定位：方框左侧 15px 处结束
+            const labelRightX = boxX - 15;
+            const labelLeftX = labelRightX - labelMetrics.width;
+            
+            // 绘制文字背景以便看清
+            // ctx.fillStyle = "red";
+            // ctx.fillRect(labelLeftX, boxYPos + boxH/2 - 15, labelMetrics.width, 30);
+            
+            // 给可编辑文字加个下划线或颜色提示
             ctx.fillStyle = "#ffffff";
             ctx.textAlign = "right";
-            // 位置在方框左侧，有一些间距
-            ctx.fillText(xLabel, boxX - 15, boxYPos + boxH/2);
+            
+            // 绘制发光效果提示可编辑
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = "rgba(255,255,255,0.5)";
+            ctx.fillText(labelText, labelRightX, boxYPos + boxH/2);
+            ctx.shadowBlur = 0;
+            
+            // 绘制下划虚线
+            ctx.beginPath();
+            ctx.strokeStyle = "rgba(255,255,255,0.3)";
+            ctx.lineWidth = 1;
+            ctx.setLineDash([2, 2]);
+            ctx.moveTo(labelLeftX, boxYPos + boxH/2 + 14);
+            ctx.lineTo(labelRightX, boxYPos + boxH/2 + 14);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // 记录点击区域 (大幅加宽)
+            lastLabelRect = {
+                x: labelLeftX,
+                y: boxYPos + boxH/2 - 20,
+                w: labelMetrics.width,
+                h: 40
+            };
 
             // 2. 绘制方框内的数字/游戏名
             ctx.textAlign = 'center';
             ctx.font = `bold ${mainFontSize}px 'Space Grotesk', 'PingFang SC', sans-serif`;
             
-            // 文字发光 (洋红色)
             ctx.shadowBlur = 15;
             ctx.shadowColor = CONFIG.mainColor;
             ctx.fillStyle = CONFIG.mainColor;
             
-            // 稍微上移一点视觉中心
             ctx.fillText(displayText, cx, boxYPos + boxH/2 + 2);
             ctx.shadowBlur = 0;
             
-            // 3. 子标题 (可选)
             if (isGameMode) {
                 ctx.font = '12px "PingFang SC", sans-serif';
                 ctx.fillStyle = 'rgba(255,255,255,0.4)';
-                // 游戏模式下，可以在方框下方显示索引，避免挤在方框里
                 ctx.fillText(subText, cx, boxYPos + boxH + 16);
             }
         }
