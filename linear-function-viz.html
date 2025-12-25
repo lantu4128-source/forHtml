@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Mode Switch | Dataism Style</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --secondary-color: #ff00ff; /* Magenta */
+            --primary-color: #00f3ff;   /* Cyan */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #fff;
+            /* 优先使用 Space Grotesk 显示数字，中文使用系统黑体 */
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .canvas-container {
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+            position: relative;
+        }
+        
+        .canvas-container:active {
+            cursor: grabbing;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* 渐隐遮罩 */
+        .vignette {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: linear-gradient(90deg, 
+                var(--bg-color) 0%, 
+                transparent 20%, 
+                transparent 80%, 
+                var(--bg-color) 100%
+            );
+            z-index: 10;
+        }
+        
+        /* 切换按钮区域 */
+        .ui-layer {
+            position: absolute;
+            top: 2rem;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .toggle-container {
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .toggle-label {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            font-weight: 500;
+        }
+        
+        .toggle-label.active {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        /* 开关样式 */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #333;
+            transition: .4s;
+            border-radius: 34px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--secondary-color);
+            box-shadow: 0 0 15px var(--secondary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        /* 提示文字 */
+        .hint {
+            position: absolute;
+            bottom: 2rem;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            pointer-events: none;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ui-layer">
+        <div class="toggle-container">
+            <span class="toggle-label active" id="label-num">数值模式</span>
+            <label class="switch">
+                <input type="checkbox" id="modeSwitch">
+                <span class="slider"></span>
+            </label>
+            <span class="toggle-label" id="label-game">游戏模式</span>
+        </div>
+    </div>
+
+    <div class="canvas-container" id="container">
+        <canvas id="canvas"></canvas>
+        <div class="vignette"></div>
+    </div>
+    
+    <div class="hint">拖动圆点 (0-10) · 拖动背景平移</div>
+
+    <script>
+        // 精选益智/休闲游戏名列表 (0-10)
+        const GAMES = [
+            "扫雷", 
+            "2048", 
+            "开心消消乐", 
+            "俄罗斯方块", 
+            "贪吃蛇",
+            "推箱子", 
+            "连连看", 
+            "泡泡龙", 
+            "祖玛", 
+            "黄金矿工",
+            "植物大战僵尸"
+        ];
+        
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('container');
+        const modeSwitch = document.getElementById('modeSwitch');
+        const labelNum = document.getElementById('label-num');
+        const labelGame = document.getElementById('label-game');
+
+        // 状态变量
+        let currentX = 5.0; // 初始值设为中间
+        let viewOffsetX = 0;
+        let isGameMode = false;
+        
+        // 拖拽状态
+        let isDraggingPoint = false;
+        let isDraggingView = false;
+        let lastPointerX = 0;
+        
+        // 布局与配置
+        let width, height, originY;
+        const CONFIG = {
+            scale: 150, // 放大比例，因为只有10个单位，间距要大一些才好看
+            minVal: 0,
+            maxVal: 10,
+            pointRadius: 10,
+            hitRadius: 30,
+            axisColor: '#ffffff',
+            dimColor: 'rgba(255, 255, 255, 0.1)',
+            gridColor: 'rgba(255, 255, 255, 0.04)',
+            mainColor: '#ff00ff', // 洋红色
+            textColor: '#ffffff'
+        };
+
+        function init() {
+            resize();
+            window.addEventListener('resize', resize);
+            
+            // 鼠标/触摸事件
+            container.addEventListener('mousedown', onPointerDown);
+            window.addEventListener('mousemove', onPointerMove);
+            window.addEventListener('mouseup', onPointerUp);
+            
+            container.addEventListener('touchstart', onPointerDown, {passive: false});
+            window.addEventListener('touchmove', onPointerMove, {passive: false});
+            window.addEventListener('touchend', onPointerUp);
+            
+            // 切换开关
+            modeSwitch.addEventListener('change', (e) => {
+                isGameMode = e.target.checked;
+                // UI 状态切换
+                if (isGameMode) {
+                    labelGame.classList.add('active');
+                    labelNum.classList.remove('active');
+                } else {
+                    labelGame.classList.remove('active');
+                    labelNum.classList.add('active');
+                }
+                draw();
+            });
+            
+            centerViewOn(currentX);
+        }
+
+        function resize() {
+            width = container.clientWidth;
+            height = container.clientHeight;
+            
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            ctx.scale(dpr, dpr);
+            
+            originY = height / 2;
+            draw();
+        }
+
+        function centerViewOn(val) {
+            viewOffsetX = (width / 2) - (val * CONFIG.scale);
+            draw();
+        }
+
+        function valToCanvas(val) {
+            return (val * CONFIG.scale) + viewOffsetX;
+        }
+
+        function canvasToVal(xPx) {
+            return (xPx - viewOffsetX) / CONFIG.scale;
+        }
+
+        function getPointerPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function onPointerDown(e) {
+            const { x, y } = getPointerPos(e);
+            lastPointerX = x;
+            
+            const pointCx = valToCanvas(currentX);
+            const pointCy = originY;
+            const dist = Math.sqrt((x - pointCx)**2 + (y - pointCy)**2);
+            
+            if (dist < CONFIG.hitRadius * 1.5) {
+                isDraggingPoint = true;
+                container.style.cursor = 'grabbing';
+            } else {
+                isDraggingView = true;
+                container.style.cursor = 'grabbing';
+            }
+        }
+
+        function onPointerMove(e) {
+            if (!isDraggingPoint && !isDraggingView) {
+                const { x, y } = getPointerPos(e);
+                const pointCx = valToCanvas(currentX);
+                const pointCy = originY;
+                const dist = Math.sqrt((x - pointCx)**2 + (y - pointCy)**2);
+                
+                if (dist < CONFIG.hitRadius * 1.5) {
+                    container.style.cursor = 'grab';
+                } else {
+                    container.style.cursor = 'grab';
+                }
+                return;
+            }
+            
+            e.preventDefault();
+            const { x } = getPointerPos(e);
+            const deltaX = x - lastPointerX;
+            
+            if (isDraggingPoint) {
+                let newVal = canvasToVal(x);
+                newVal = Math.max(CONFIG.minVal, Math.min(CONFIG.maxVal, newVal));
+                
+                // 磁吸
+                const rounded = Math.round(newVal);
+                // 范围变小了，磁吸区域可以相对宽松一点
+                const magnetStrength = isGameMode ? 0.35 : 0.15;
+                if (Math.abs(newVal - rounded) < magnetStrength) {
+                    newVal = rounded;
+                }
+                
+                currentX = newVal;
+                
+                // 边缘滚动
+                const screenEdgeBuffer = 80;
+                if (x < screenEdgeBuffer) {
+                    viewOffsetX += 8;
+                } else if (x > width - screenEdgeBuffer) {
+                    viewOffsetX -= 8;
+                }
+                
+            } else if (isDraggingView) {
+                viewOffsetX += deltaX;
+            }
+            
+            lastPointerX = x;
+            draw();
+        }
+
+        function onPointerUp() {
+            isDraggingPoint = false;
+            isDraggingView = false;
+            container.style.cursor = 'grab';
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            
+            drawGrid();
+            drawAxisLines();
+            drawPointAndLabel(currentX);
+        }
+
+        function drawGrid() {
+            const startVal = Math.floor(canvasToVal(0));
+            const endVal = Math.ceil(canvasToVal(width));
+
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = CONFIG.gridColor;
+            
+            ctx.beginPath();
+            for (let i = startVal; i <= endVal; i++) {
+                const x = valToCanvas(i);
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+            }
+            ctx.stroke();
+        }
+        
+        function drawAxisLines() {
+            // 底线
+            ctx.beginPath();
+            ctx.strokeStyle = CONFIG.dimColor;
+            ctx.lineWidth = 2;
+            ctx.moveTo(0, originY);
+            ctx.lineTo(width, originY);
+            ctx.stroke();
+            
+            // 有效范围线 (0-10)
+            const x0 = valToCanvas(CONFIG.minVal);
+            const x10 = valToCanvas(CONFIG.maxVal);
+            
+            ctx.beginPath();
+            ctx.strokeStyle = CONFIG.axisColor;
+            ctx.lineWidth = 2;
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = 'rgba(255,255,255,0.5)';
+            ctx.moveTo(Math.max(x0, -10), originY);
+            ctx.lineTo(Math.min(x10, width + 10), originY);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // 刻度绘制
+            const startVisible = Math.floor(canvasToVal(0));
+            const endVisible = Math.ceil(canvasToVal(width));
+            
+            const loopStart = Math.max(startVisible, CONFIG.minVal - 1);
+            const loopEnd = Math.min(endVisible, CONFIG.maxVal + 1);
+
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Space Grotesk';
+
+            for (let i = loopStart; i <= loopEnd; i++) {
+                const x = valToCanvas(i);
+                const isMainRange = i >= CONFIG.minVal && i <= CONFIG.maxVal;
+                
+                // 1. 刻度线
+                ctx.beginPath();
+                if (isMainRange) {
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                } else {
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+                }
+                
+                ctx.moveTo(x, originY - 8);
+                ctx.lineTo(x, originY + 8);
+                ctx.stroke();
+
+                // 2. 刻度文字
+                // 只有 0-10，每个都显示
+                const showLabel = true;
+                
+                if (showLabel) {
+                    if (isMainRange) {
+                        ctx.fillText(i, x, originY + 18);
+                    } else {
+                        // 范围外的不显示或者淡显示，这里选择不显示以聚焦 0-10
+                    }
+                }
+            }
+            
+            // 边界竖线
+            ctx.strokeStyle = CONFIG.mainColor;
+            ctx.lineWidth = 3;
+            
+            ctx.beginPath();
+            ctx.moveTo(x0, originY - 12);
+            ctx.lineTo(x0, originY + 12);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(x10, originY - 12);
+            ctx.lineTo(x10, originY + 12);
+            ctx.stroke();
+        }
+
+        function drawPointAndLabel(val) {
+            const cx = valToCanvas(val);
+            const cy = originY;
+            
+            // 增大高度和尺寸
+            const labelHeight = 70; // 连线更长
+            const labelY = cy - labelHeight;
+
+            // 1. 连接线
+            ctx.beginPath();
+            ctx.strokeStyle = CONFIG.mainColor;
+            ctx.lineWidth = 2;
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(cx, labelY + 28); // 留出方框下方的空隙
+            ctx.stroke();
+
+            // 2. 圆点 (参考图样式)
+            // 实心点
+            ctx.beginPath();
+            ctx.fillStyle = CONFIG.mainColor;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = CONFIG.mainColor;
+            ctx.arc(cx, cy, CONFIG.pointRadius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            
+            // 外圈描边 (白色光环)
+            ctx.beginPath();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 3;
+            ctx.arc(cx, cy, CONFIG.pointRadius + 4, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // ---------------------
+            // 方框绘制
+            // ---------------------
+            let displayText = "";
+            let subText = "";
+            
+            if (isGameMode) {
+                const idx = Math.round(val);
+                displayText = GAMES[idx] || `游戏 #${idx}`;
+                subText = `索引: ${idx}`;
+            } else {
+                displayText = val.toFixed(1).replace(/[.,]0$/, '');
+                subText = "数值";
+            }
+
+            // 字体设置
+            const mainFontSize = isGameMode ? 32 : 48; // 数字大一些
+            // 确保数字用 Space Grotesk，中文用黑体
+            ctx.font = `bold ${mainFontSize}px 'Space Grotesk', 'PingFang SC', sans-serif`;
+            
+            const textMetrics = ctx.measureText(displayText);
+            let boxW = textMetrics.width + 50;
+            if (boxW < 140) boxW = 140; // 最小宽度
+            
+            const boxH = isGameMode ? 70 : 70;
+            const boxX = cx - boxW / 2;
+            const boxYPos = labelY - boxH;
+
+            // 方框背景 (深色半透明)
+            ctx.fillStyle = 'rgba(20, 20, 20, 0.85)';
+            ctx.strokeStyle = CONFIG.mainColor;
+            ctx.lineWidth = 2;
+            
+            // 发光边框
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = CONFIG.mainColor;
+            
+            // 绘制方框
+            roundRect(ctx, boxX, boxYPos, boxW, boxH, 6);
+            ctx.fill();
+            ctx.stroke();
+            ctx.shadowBlur = 0; // 关掉阴影
+
+            // ---------------------
+            // 绘制内容
+            // ---------------------
+            ctx.textBaseline = 'middle';
+            
+            // 1. 绘制左侧的 x =
+            const xLabel = "x =";
+            ctx.font = "bold 24px 'Space Grotesk', sans-serif";
+            ctx.fillStyle = "#ffffff";
+            ctx.textAlign = "right";
+            // 位置在方框左侧，有一些间距
+            ctx.fillText(xLabel, boxX - 15, boxYPos + boxH/2);
+
+            // 2. 绘制方框内的数字/游戏名
+            ctx.textAlign = 'center';
+            ctx.font = `bold ${mainFontSize}px 'Space Grotesk', 'PingFang SC', sans-serif`;
+            
+            // 文字发光 (洋红色)
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = CONFIG.mainColor;
+            ctx.fillStyle = CONFIG.mainColor;
+            
+            // 稍微上移一点视觉中心
+            ctx.fillText(displayText, cx, boxYPos + boxH/2 + 2);
+            ctx.shadowBlur = 0;
+            
+            // 3. 子标题 (可选)
+            if (isGameMode) {
+                ctx.font = '12px "PingFang SC", sans-serif';
+                ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                // 游戏模式下，可以在方框下方显示索引，避免挤在方框里
+                ctx.fillText(subText, cx, boxYPos + boxH + 16);
+            }
+        }
+
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+
+        init();
+    </script>
+</body>
+</html>
