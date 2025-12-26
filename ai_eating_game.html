@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大模型吞噬进化 - Neon Verse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;900&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #050510;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a3a 0%, #050510 100%);
+            font-family: 'Fredoka', 'Microsoft YaHei', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+            color: #fff;
+        }
+
+        #game-container {
+            position: relative;
+            width: 1280px; /* 16:9 Width */
+            height: 720px; /* 16:9 Height */
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), inset 0 0 100px rgba(0,0,0,0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: background 1s ease;
+        }
+
+        #game-container.victory-mode {
+            background: #050510; /* Clean background for victory */
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .score-board {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            text-align: right;
+            background: linear-gradient(90deg, rgba(255, 77, 136, 0.2), rgba(160, 32, 240, 0.2));
+            padding: 10px 25px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(255, 77, 136, 0.3);
+            backdrop-filter: blur(5px);
+            transition: opacity 0.5s;
+        }
+
+        .score-label {
+            font-size: 18px;
+            color: #ffccff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            font-size: 48px;
+            color: #fff;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            line-height: 1;
+        }
+
+        /* Start/Game Over Screen */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 5, 16, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            pointer-events: auto;
+            transition: opacity 0.3s;
+        }
+
+        .overlay h1 {
+            font-size: 56px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff3366, #ff00cc, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 0, 204, 0.3);
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        /* Settings Form */
+        .settings-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            width: 80%;
+            justify-content: center;
+        }
+
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 1;
+        }
+
+        .input-wrapper label {
+            font-size: 14px;
+            color: #00ffff;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .input-wrapper textarea, .input-wrapper input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            color: #fff;
+            font-family: 'Microsoft YaHei', sans-serif;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-wrapper textarea:focus, .input-wrapper input:focus {
+            border-color: #00ffff;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .input-wrapper textarea {
+            height: 80px;
+        }
+
+        .input-wrapper input {
+            height: 40px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn {
+            padding: 15px 60px;
+            font-size: 24px;
+            background: linear-gradient(135deg, #00ccff, #0066ff);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s;
+            font-family: inherit;
+            font-weight: 600;
+            box-shadow: 0 0 20px rgba(0, 204, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.6);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .hidden {
+            display: none !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Victory Screen */
+        #victoryScreen {
+            background: rgba(255, 255, 255, 0.95);
+            background: #050510;
+        }
+        
+        /* Remove blur/overlay styles for victory mode */
+        #victoryOverlay {
+            backdrop-filter: none;
+            background: transparent;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <canvas id="gameCanvas" width="1280" height="720"></canvas>
+
+        <div id="ui-layer">
+            <div class="score-board">
+                <div class="score-label">得分</div>
+                <div class="score-value" id="scoreDisplay">0</div>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="startScreen" class="overlay">
+            <h1>NEON EVOLUTION</h1>
+            <p style="font-size: 18px; color: #ccc; max-width: 600px; text-align: center; line-height: 1.6; margin-bottom: 30px;">
+                控制大模型吞噬 <span style="color:#00ffcc">优质数据</span> 进化，规避 <span style="color:#ff3366">有毒数据</span>。<br>
+                达到设定分值即可完成训练进化！
+            </p>
+            
+            <div style="display: flex; gap: 20px;">
+                <button class="btn" onclick="startGame()">START ENGINE</button>
+                <button class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); box-shadow: none;" onclick="showSettings()">SETTINGS</button>
+            </div>
+        </div>
+
+        <!-- Settings Screen -->
+        <div id="settingsScreen" class="overlay hidden">
+            <h2 style="color: #00ffff; margin-bottom: 30px; letter-spacing: 2px;">CONFIGURATION</h2>
+            
+            <div class="settings-group">
+                <div class="input-wrapper" style="flex: 2;">
+                    <label>好概念 (用逗号分隔)</label>
+                    <textarea id="goodWordsInput" placeholder="CNN, Transformer, 神经网络...">CNN, RNN, Transformer, 注意力机制, 神经网络, 深度学习, GPT-4, BERT, RLHF, 微调</textarea>
+                </div>
+                <div class="input-wrapper" style="flex: 2;">
+                    <label>坏概念 (用逗号分隔)</label>
+                    <textarea id="badWordsInput" placeholder="幻觉, 偏见, 过拟合...">模型幻觉, 数据偏见, 过拟合, 灾难性遗忘, 404错误, 噪声干扰, 系统崩溃, 响应延迟, Concept Drift</textarea>
+                </div>
+                <div class="input-wrapper" style="flex: 1;">
+                    <label>胜利分数</label>
+                    <input type="number" id="winScoreInput" value="100" min="10" step="10">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px;">
+                <button class="btn" onclick="saveSettings()">SAVE</button>
+                <button class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); box-shadow: none;" onclick="closeSettings()">CANCEL</button>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="overlay hidden">
+            <h1 style="color: #ff3366;">SYSTEM FAILURE</h1>
+            <p>Score Reached Critical Level: -100</p>
+            <button class="btn" onclick="showStartScreen()">REBOOT</button>
+        </div>
+
+        <!-- Victory Screen Elements (Overlay is transparent, handled by canvas) -->
+        <div id="victoryOverlay" class="overlay hidden" style="background: transparent; pointer-events: none;">
+            <div id="victoryText" style="display:none">PERFECT EVOLUTION</div>
+             <!-- Button Removed -->
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const victoryOverlay = document.getElementById('victoryOverlay');
+        const settingsScreen = document.getElementById('settingsScreen');
+        const container = document.getElementById('game-container');
+
+        // Inputs
+        const goodInput = document.getElementById('goodWordsInput');
+        const badInput = document.getElementById('badWordsInput');
+        const winScoreInput = document.getElementById('winScoreInput');
+
+        // Game State
+        let gameState = 'start'; // start, playing, victory, gameover
+        let score = 0;
+        let frameCount = 0;
+        
+        // Defaults
+        const DEFAULT_GOOD = ['CNN', 'RNN', 'Transformer', '注意力机制', '神经网络', '深度学习', 'GPT-4', 'BERT', 'RLHF', '微调'];
+        const DEFAULT_BAD = ['模型幻觉', '数据偏见', '过拟合', '灾难性遗忘', '404错误', '噪声干扰', '系统崩溃', '响应延迟', '概念漂移'];
+        const DEFAULT_WIN = 100;
+
+        let winningScore = DEFAULT_WIN;
+        let goodWords = [...DEFAULT_GOOD];
+        let badWords = [...DEFAULT_BAD];
+        
+        // Configuration
+        const BASE_SIZE = 100;
+        const GROUND_Y = 480; // The fixed ground line position
+        const GRAVITY_SPEED = 4;
+        const SPAWN_RATE = 50;   
+        const PLAYER_SPEED = 10;
+        
+        // Entities
+        let player = {
+            x: 600,
+            y: GROUND_Y,
+            width: BASE_SIZE,
+            height: BASE_SIZE,
+            vx: 0,
+            targetX: null,
+            faceState: 'normal',
+            tilt: 0,
+            scale: 1
+        };
+
+        let items = [];
+        let particles = [];
+        let stars = [];
+        let meteors = [];
+
+        // Init Stars
+        function initStars() {
+            stars = [];
+            for(let i=0; i<100; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 0.5,
+                    alpha: Math.random(),
+                    speed: Math.random() * 0.5 + 0.1
+                });
+            }
+        }
+        initStars();
+
+        // Input Handling
+        const keys = { ArrowLeft: false, ArrowRight: false };
+
+        window.addEventListener('keydown', (e) => {
+            if (keys.hasOwnProperty(e.code)) keys[e.code] = true;
+        });
+        window.addEventListener('keyup', (e) => {
+            if (keys.hasOwnProperty(e.code)) keys[e.code] = false;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (gameState !== 'playing') return;
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            player.targetX = (e.clientX - rect.left) * scaleX - player.width / 2;
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            if (gameState !== 'playing') return;
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const touch = e.touches[0];
+            player.targetX = (touch.clientX - rect.left) * scaleX - player.width / 2;
+        }, {passive: false});
+
+
+        let animationId = null;
+
+        function showStartScreen() {
+            gameState = 'start';
+            startScreen.classList.remove('hidden');
+            settingsScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            victoryOverlay.classList.add('hidden');
+            container.classList.remove('victory-mode');
+            document.querySelector('.score-board').style.opacity = '1';
+            
+            // Background reset
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            initStars();
+            
+            if (animationId) cancelAnimationFrame(animationId);
+            gameLoop();
+        }
+
+        function showSettings() {
+            startScreen.classList.add('hidden');
+            settingsScreen.classList.remove('hidden');
+            
+            // Populate inputs with current active settings (or defaults if first time)
+            goodInput.value = goodWords.join(', ');
+            badInput.value = badWords.join(', ');
+            winScoreInput.value = winningScore;
+        }
+
+        function closeSettings() {
+            settingsScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }
+
+        function saveSettings() {
+            try {
+                const newGood = parseInput(goodInput, null);
+                const newBad = parseInput(badInput, null);
+                const newScore = parseInt(winScoreInput.value);
+
+                if (newGood) goodWords = newGood;
+                if (newBad) badWords = newBad;
+                if (newScore && newScore > 0) winningScore = newScore;
+                
+                closeSettings();
+            } catch (e) {
+                alert("设置保存失败，请检查输入格式");
+            }
+        }
+
+        function parseInput(input, defaults) {
+            if (!input || !input.value) return defaults;
+            const val = input.value.trim();
+            if (!val) return defaults;
+            // Split by comma (half/full width) or newline
+            const items = val.split(/[,，\n\r]+/).map(s => s.trim()).filter(s => s.length > 0);
+            return items.length > 0 ? items : defaults;
+        }
+
+        function startGame() {
+            // Safety: Stop any existing loop
+            if (animationId) cancelAnimationFrame(animationId);
+
+            // Use current variables (goodWords, badWords, winningScore) which are already set by default or saveSettings
+
+            // Reset
+            gameState = 'playing';
+            score = 0;
+            items = [];
+            particles = [];
+            meteors = [];
+            player.x = canvas.width / 2 - BASE_SIZE / 2;
+            player.faceState = 'normal';
+            player.scale = 1;
+            player.width = BASE_SIZE;
+            player.height = BASE_SIZE;
+            player.tilt = 0;
+            player.vx = 0;
+            player.targetX = null;
+            
+            scoreDisplay.textContent = score;
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            victoryOverlay.classList.add('hidden');
+            
+            gameLoop();
+        }
+
+        function winGame() {
+            gameState = 'victory';
+            container.classList.add('victory-mode');
+            victoryOverlay.classList.remove('hidden');
+            // Force reflow to trigger transition
+            void victoryOverlay.offsetWidth;
+            victoryOverlay.classList.add('show');
+            document.querySelector('.score-board').style.opacity = '0';
+            
+            player.targetX = null;
+            player.vx = 0;
+            player.tilt = 0;
+        }
+
+        function loseGame() {
+            gameState = 'gameover';
+            gameOverScreen.classList.remove('hidden');
+        }
+
+        function gameLoop() {
+            // Logic update
+            if (gameState === 'playing' || gameState === 'victory') {
+                update();
+            }
+            
+            // Drawing
+            draw();
+            
+            // Loop control
+            if (gameState === 'playing' || gameState === 'victory' || gameState === 'start') {
+                animationId = requestAnimationFrame(gameLoop);
+            }
+        }
+
+        function update() {
+            if (gameState === 'victory') {
+                // Victory Animation Logic
+                // Lerp to target position (Ref Image: Lower Center, similar to starting position but scaled)
+                const centerX = canvas.width / 2 - player.width / 2;
+                
+                // Target Y: Maintain ground alignment like reference? 
+                // Reference shows it sitting on the "invisible" ground line
+                const groundY = GROUND_Y + BASE_SIZE + 2; 
+                const targetY = groundY - player.height;
+
+                player.x += (centerX - player.x) * 0.1;
+                player.y += (targetY - player.y) * 0.1;
+                
+                // Scale to 150%
+                const targetScale = 1.5;
+                player.scale += (targetScale - player.scale) * 0.1;
+                player.width = BASE_SIZE * player.scale;
+                player.height = BASE_SIZE * player.scale;
+                
+                // Reset tilt
+                player.tilt += (0 - player.tilt) * 0.1;
+
+                player.faceState = 'happy';
+                return;
+            }
+
+            if (gameState !== 'playing') return;
+
+            frameCount++;
+
+            // --- Scaling Logic ---
+            let scaleProgress = 0;
+            if (score >= 0) {
+                scaleProgress = Math.min(score / winningScore, 1);
+                // 0 -> 1.0, Win -> 1.5
+                player.scale = 1 + (scaleProgress * 0.5); 
+            } else {
+                scaleProgress = Math.max(score / 100, -1); // -100 is max loss
+                // 0 -> 1.0, -100 -> 0.6
+                // scaleProgress is negative (e.g., -0.5)
+                // We want 1 - 0.4 = 0.6 at -1
+                player.scale = 1 + (scaleProgress * 0.4); 
+            }
+            
+            // Update dimensions
+            const oldBottom = player.y + player.height;
+            player.width = BASE_SIZE * player.scale;
+            player.height = BASE_SIZE * player.scale;
+            // Keep bottom aligned to ground? Or center? 
+            // Reference 2 implies moving on a line. Let's keep bottom fixed roughly
+            // Actually, let's align bottom to GROUND_Y + BASE_SIZE
+            player.y = (GROUND_Y + BASE_SIZE) - player.height;
+
+
+            // --- Star Animation ---
+            stars.forEach(s => {
+                s.y += s.speed;
+                s.alpha += (Math.random() - 0.5) * 0.05;
+                if(s.alpha < 0) s.alpha = 0;
+                if(s.alpha > 1) s.alpha = 1;
+                if(s.y > canvas.height) {
+                    s.y = 0;
+                    s.x = Math.random() * canvas.width;
+                }
+            });
+
+            // --- Meteor Animation ---
+            // Spawn
+            if (Math.random() < 0.03) {
+                meteors.push({
+                    x: Math.random() * canvas.width + 200, 
+                    y: -100,
+                    length: Math.random() * 80 + 40,
+                    speed: Math.random() * 5 + 10,
+                    life: 1
+                });
+            }
+            // Update
+            for (let i = meteors.length - 1; i >= 0; i--) {
+                let m = meteors[i];
+                m.x -= m.speed;
+                m.y += m.speed;
+                m.life -= 0.015;
+                if (m.life <= 0 || m.y > canvas.height + 100) {
+                    meteors.splice(i, 1);
+                }
+            }
+
+            // --- Player Movement ---
+            if (player.targetX !== null) {
+                const dx = player.targetX - player.x;
+                if (Math.abs(dx) > 1) {
+                    player.vx = dx * 0.15;
+                    player.x += player.vx;
+                } else {
+                    player.vx = 0;
+                }
+            } else {
+                if (keys.ArrowLeft) {
+                    player.vx = -PLAYER_SPEED;
+                    player.x += player.vx;
+                } else if (keys.ArrowRight) {
+                    player.vx = PLAYER_SPEED;
+                    player.x += player.vx;
+                } else {
+                    player.vx = 0;
+                }
+            }
+            
+            // Boundary
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+
+            // Tilt/Thickness
+            let targetTilt = 0;
+            if (Math.abs(player.vx) > 0.1) {
+                targetTilt = player.vx * 2.5; 
+                if(targetTilt > 30) targetTilt = 30;
+                if(targetTilt < -30) targetTilt = -30;
+            }
+            player.tilt += (targetTilt - player.tilt) * 0.15;
+
+            // --- Spawning ---
+            // Adjust spawn rate based on scale? Bigger player = easier to hit
+            let currentSpawnRate = Math.max(20, SPAWN_RATE - Math.floor(score / 50));
+            if (frameCount % currentSpawnRate === 0) spawnItem();
+
+            // --- Items Update ---
+            for (let i = items.length - 1; i >= 0; i--) {
+                let item = items[i];
+                item.y += item.speed;
+
+                if (checkCollision(player, item)) {
+                    handleCollision(item);
+                    items.splice(i, 1);
+                    continue;
+                }
+                if (item.y > canvas.height) items.splice(i, 1);
+            }
+
+            // --- Particles Update ---
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.y -= 1.5;
+                p.life--;
+                if (p.life <= 0) particles.splice(i, 1);
+            }
+
+            if (frameCount % 60 === 0) player.faceState = 'normal';
+        }
+
+        function spawnItem() {
+            const isGood = Math.random() > 0.3;
+            const wordList = isGood ? goodWords : badWords;
+            // Additional safety
+            if (!wordList || wordList.length === 0) return;
+            
+            const text = wordList[Math.floor(Math.random() * wordList.length)] || "Data";
+            
+            ctx.font = `600 20px 'Fredoka', sans-serif`;
+            const textMetrics = ctx.measureText(text);
+            const w = textMetrics.width + 40; 
+            const h = 44;
+
+            items.push({
+                x: Math.random() * (canvas.width - w),
+                y: -60,
+                width: w,
+                height: h,
+                text: text,
+                isGood: isGood,
+                speed: GRAVITY_SPEED + Math.random() * 2,
+                gradientType: isGood ? (Math.random()>0.5 ? 'success' : 'active') : 'warning'
+            });
+        }
+
+        function checkCollision(p, i) {
+            const margin = 10 * p.scale; // Scale margin too
+            return (
+                p.x + margin < i.x + i.width &&
+                p.x + p.width - margin > i.x &&
+                p.y + margin < i.y + i.height &&
+                p.y + p.height - margin > i.y
+            );
+        }
+
+        function handleCollision(item) {
+            if (item.isGood) {
+                score += 10;
+                player.faceState = 'happy';
+                createParticle(player.x + player.width/2, player.y, "+10", "#00ffcc");
+            } else {
+                score -= 10;
+                player.faceState = 'hurt';
+                createParticle(player.x + player.width/2, player.y, "警告!", "#ff3366");
+            }
+            scoreDisplay.textContent = score;
+
+            // Check End Conditions
+            if (score >= winningScore) {
+                winGame();
+            } else if (score <= -100) {
+                loseGame();
+            }
+        }
+
+        function createParticle(x, y, text, color) {
+            particles.push({
+                x: x,
+                y: y,
+                text: text,
+                color: color,
+                life: 60,
+                scale: 1.0
+            });
+        }
+
+        // --- DRAWING ---
+
+        function draw() {
+            // Victory Mode: Clear everything to background color
+            if (gameState === 'victory') {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // NO Draw Ground Line - "Background elements disappear"
+                
+                // Draw Player (Centered and scaled)
+                drawPlayer(player.x, player.y, player.width, player.height);
+                return;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Draw Stars
+            if (gameState === 'playing' || gameState === 'start') {
+                stars.forEach(s => {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                // 1.5 Draw Meteors
+                meteors.forEach(m => {
+                    ctx.beginPath();
+                    const tailX = m.x + m.length;
+                    const tailY = m.y - m.length;
+                    
+                    const grad = ctx.createLinearGradient(m.x, m.y, tailX, tailY);
+                    grad.addColorStop(0, `rgba(200, 255, 255, ${m.life})`); // Head
+                    grad.addColorStop(0.4, `rgba(0, 200, 255, ${m.life * 0.5})`);
+                    grad.addColorStop(1, `rgba(0, 0, 255, 0)`); // Tail
+                    
+                    ctx.strokeStyle = grad;
+                    ctx.lineWidth = 2;
+                    ctx.lineCap = 'round';
+                    ctx.moveTo(m.x, m.y);
+                    ctx.lineTo(tailX, tailY);
+                    ctx.stroke();
+                });
+            }
+
+            // 2. Draw Ground
+            drawGround();
+
+            // 3. Draw Player
+            drawPlayer(player.x, player.y, player.width, player.height);
+
+            // 4. Draw Items
+            if (gameState === 'playing') {
+                items.forEach(drawItem);
+            }
+
+            // 5. Draw Particles
+            particles.forEach(p => {
+                ctx.save();
+                p.scale += 0.02;
+                ctx.translate(p.x, p.y);
+                ctx.scale(p.scale, p.scale);
+                ctx.fillStyle = p.color;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 20; 
+                ctx.font = "900 40px 'Fredoka', sans-serif";
+                ctx.textAlign = "center"; 
+                ctx.globalAlpha = Math.max(0, p.life / 60);
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.strokeText(p.text, 0, 0);
+                ctx.fillText(p.text, 0, 0);
+                ctx.restore();
+            });
+        }
+
+        function drawGround() {
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = '#00ffff';
+            ctx.strokeStyle = '#00ffff';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            // Ground Y is fixed relative to base size
+            const yPos = GROUND_Y + BASE_SIZE + 2; 
+            ctx.moveTo(0, yPos);
+            ctx.lineTo(canvas.width, yPos);
+            ctx.stroke();
+            ctx.shadowBlur = 0; 
+        }
+
+        function drawPlayer(x, y, w, h) {
+            ctx.save();
+            
+            // Scale thickness by player scale
+            const thickness = player.tilt * player.scale;
+            
+            const frontGradient = ctx.createLinearGradient(x, y, x, y + h);
+            frontGradient.addColorStop(0, 'rgba(0, 204, 255, 0.4)');
+            frontGradient.addColorStop(1, 'rgba(0, 102, 255, 0.2)');
+            
+            const backColor = 'rgba(0, 204, 255, 0.25)';
+            const borderColor = '#00ffff';
+
+            ctx.shadowBlur = 30;
+            ctx.shadowColor = '#00ccff';
+            
+            // 1. Draw BACK Rect (Thickness)
+            if (Math.abs(thickness) > 0.5) {
+                ctx.fillStyle = backColor;
+                ctx.strokeStyle = 'rgba(0, 204, 255, 0.5)';
+                ctx.lineWidth = 1;
+                
+                // Use scaled radius
+                const r = 15 * player.scale;
+                
+                roundRect(ctx, x - thickness, y, w, h, r, true, false);
+                
+                // Fill connection
+                const cornerMargin = r - 1; 
+                ctx.fillRect(Math.min(x, x-thickness), y + cornerMargin, Math.abs(thickness), h - (cornerMargin * 2));
+            }
+
+            // 2. Draw FRONT Rect
+            ctx.fillStyle = frontGradient;
+            ctx.strokeStyle = borderColor;
+            ctx.lineWidth = 3;
+            roundRect(ctx, x, y, w, h, 15 * player.scale, true, true);
+
+            // 3. Face Details
+            const faceShift = thickness * 0.4;
+            
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#ffffff';
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 4 * player.scale; // Scale line width
+            ctx.lineCap = 'round';
+            
+            const cx = x + w/2 + faceShift;
+            const cy = y + h/2;
+            const eyeOffset = 20 * player.scale;
+            const eyeSize = 5 * player.scale; // For dots
+
+            if (player.faceState === 'happy') {
+                // Happy ^ ^
+                const s = player.scale;
+                ctx.beginPath();
+                // Left
+                ctx.moveTo(cx - 25*s, cy - 5*s);
+                ctx.lineTo(cx - 15*s, cy - 15*s);
+                ctx.lineTo(cx - 5*s, cy - 5*s);
+                // Right
+                ctx.moveTo(cx + 5*s, cy - 5*s);
+                ctx.lineTo(cx + 15*s, cy - 15*s);
+                ctx.lineTo(cx + 25*s, cy - 5*s);
+                ctx.stroke();
+                
+                // Mouth
+                ctx.beginPath();
+                ctx.arc(cx, cy + 5*s, 15*s, 0, Math.PI);
+                ctx.stroke();
+
+            } else if (player.faceState === 'hurt') {
+                // Hurt > <
+                const s = player.scale;
+                ctx.beginPath();
+                ctx.moveTo(cx - 25*s, cy - 15*s);
+                ctx.lineTo(cx - 15*s, cy - 5*s);
+                ctx.lineTo(cx - 25*s, cy + 5*s);
+
+                ctx.moveTo(cx + 25*s, cy - 15*s);
+                ctx.lineTo(cx + 15*s, cy - 5*s);
+                ctx.lineTo(cx + 25*s, cy + 5*s);
+                ctx.stroke();
+                
+                // Mouth
+                ctx.beginPath();
+                ctx.moveTo(cx - 15*s, cy + 20*s);
+                ctx.quadraticCurveTo(cx, cy + 10*s, cx + 15*s, cy + 20*s);
+                ctx.stroke();
+            } else {
+                // Normal
+                const s = player.scale;
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(cx - 15*s, cy - 5*s, 5*s, 0, Math.PI*2);
+                ctx.arc(cx + 15*s, cy - 5*s, 5*s, 0, Math.PI*2);
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.moveTo(cx - 10*s, cy + 15*s);
+                ctx.lineTo(cx + 10*s, cy + 15*s);
+                ctx.stroke();
+            }
+            
+            ctx.restore();
+        }
+
+        function drawItem(item) {
+            ctx.save();
+            const r = item.height / 2;
+            
+            let grad;
+            let shadowColor;
+            
+            if (item.gradientType === 'success') {
+                grad = ctx.createLinearGradient(item.x, item.y, item.x + item.width, item.y);
+                grad.addColorStop(0, '#ff4d88');
+                grad.addColorStop(1, '#a020f0');
+                shadowColor = '#ff4d88';
+            } else if (item.gradientType === 'active') {
+                grad = ctx.createLinearGradient(item.x, item.y, item.x + item.width, item.y);
+                grad.addColorStop(0, '#00ccff');
+                grad.addColorStop(1, '#00ffcc');
+                shadowColor = '#00ccff';
+            } else {
+                grad = ctx.createLinearGradient(item.x, item.y, item.x + item.width, item.y);
+                grad.addColorStop(0, '#ffcc00');
+                grad.addColorStop(1, '#ff6666');
+                shadowColor = '#ff6666';
+            }
+
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = shadowColor;
+            ctx.fillStyle = grad;
+            
+            ctx.beginPath();
+            ctx.moveTo(item.x + r, item.y);
+            ctx.lineTo(item.x + item.width - r, item.y);
+            ctx.arcTo(item.x + item.width, item.y, item.x + item.width, item.y + item.height, r);
+            ctx.arcTo(item.x + item.width, item.y + item.height, item.x, item.y + item.height, r);
+            ctx.arcTo(item.x, item.y + item.height, item.x, item.y, r);
+            ctx.arcTo(item.x, item.y, item.x + item.width, item.y, r);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.beginPath();
+            ctx.ellipse(item.x + item.width/2, item.y + 10, item.width/2 - 5, 5, 0, 0, Math.PI*2);
+            ctx.fill();
+
+            ctx.shadowBlur = 0; 
+            ctx.fillStyle = '#fff';
+            ctx.font = "600 20px 'Fredoka', sans-serif";
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(item.text, item.x + item.width / 2, item.y + item.height / 2 + 2);
+
+            ctx.restore();
+        }
+
+        function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+            if (typeof stroke === 'undefined') { stroke = true; }
+            if (typeof radius === 'undefined') { radius = 5; }
+            if (typeof radius === 'number') {
+                radius = {tl: radius, tr: radius, br: radius, bl: radius};
+            } else {
+                var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
+                for (var side in defaultRadius) {
+                    radius[side] = radius[side] || defaultRadius[side];
+                }
+            }
+            ctx.beginPath();
+            ctx.moveTo(x + radius.tl, y);
+            ctx.lineTo(x + width - radius.tr, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+            ctx.lineTo(x + width, y + height - radius.br);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+            ctx.lineTo(x + radius.bl, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+            ctx.lineTo(x, y + radius.tl);
+            ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+            ctx.closePath();
+            if (fill) { ctx.fill(); }
+            if (stroke) { ctx.stroke(); }
+        }
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
