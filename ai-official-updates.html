@@ -100,7 +100,8 @@
     }
 
     function statusOf(tool) {
-      if (tool.lastError) return { cls: "err", text: "抓取异常" };
+      const hasItems = Array.isArray(tool.items) && tool.items.length > 0;
+      if (tool.lastError && !hasItems) return { cls: "err", text: "抓取异常" };
       if (tool.isNew) return { cls: "new", text: "有新更新" };
       return { cls: "same", text: "保留最近更新" };
     }

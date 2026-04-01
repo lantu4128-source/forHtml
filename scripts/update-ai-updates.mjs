@@ -116,16 +116,36 @@ function makeMirror(url) {
   return `https://r.jina.ai/http://${String(url).replace(/^https?:\/\//, "")}`;
 }
 
-async function fetchText(url) {
+async function fetchWithTimeout(url) {
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 20000);
   try {
-    const res = await fetch(makeMirror(url), { signal: ctl.signal });
+    const res = await fetch(url, {
+      signal: ctl.signal,
+      redirect: "follow",
+      headers: {
+        "user-agent": "Mozilla/5.0 (compatible; AIUpdatesBot/1.0; +https://github.com)",
+        "accept-language": "zh-CN,zh;q=0.9,en;q=0.8",
+      },
+    });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.text();
   } finally {
     clearTimeout(timer);
   }
+}
+
+async function fetchText(url) {
+  const tries = [url, makeMirror(url)];
+  let lastErr = null;
+  for (const target of tries) {
+    try {
+      return await fetchWithTimeout(target);
+    } catch (err) {
+      lastErr = err;
+    }
+  }
+  throw lastErr instanceof Error ? lastErr : new Error(String(lastErr || "fetch failed"));
 }
 
 function parseItems(text, tool) {
@@ -186,11 +206,13 @@ async function main() {
         isNew = Boolean(oldFp) && oldFp !== newFp;
         items = isNew || !oldItems.length ? parsed : oldItems;
         lastSuccessAt = new Date().toISOString();
-      } else {
-        lastError = "未解析到更新，保留最近数据";
+      } else if (!oldItems.length) {
+        lastError = "未解析到更新，且无历史缓存";
       }
     } catch (err) {
-      lastError = err instanceof Error ? err.message : String(err);
+      if (!oldItems.length) {
+        lastError = err instanceof Error ? err.message : String(err);
+      }
     }
 
     nextTools.push({

@@ -1,14 +1,14 @@
 {
-  "updatedAt": "2026-04-01T10:56:37.105Z",
+  "updatedAt": "2026-04-01T11:11:09.565Z",
   "date": "2026-04-01",
   "tools": [
     {
       "id": "doubao",
       "name": "豆包",
       "officialUrl": "https://www.doubao.com/",
-      "lastCheckedAt": "2026-04-01T10:56:37.095Z",
+      "lastCheckedAt": "2026-04-01T11:11:09.550Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
-      "lastError": "fetch failed",
+      "lastError": "",
       "isNew": false,
       "items": [
         {
@@ -22,9 +22,9 @@
       "id": "yuanqi",
       "name": "腾讯元器",
       "officialUrl": "https://yuanqi.tencent.com/changelog/product-changelog",
-      "lastCheckedAt": "2026-04-01T10:56:37.097Z",
+      "lastCheckedAt": "2026-04-01T11:11:09.553Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
-      "lastError": "fetch failed",
+      "lastError": "",
       "isNew": false,
       "items": [
         {
@@ -38,9 +38,9 @@
       "id": "deepseek",
       "name": "DeepSeek",
       "officialUrl": "https://api-docs.deepseek.com/zh-cn/updates",
-      "lastCheckedAt": "2026-04-01T10:56:37.098Z",
+      "lastCheckedAt": "2026-04-01T11:11:09.555Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
-      "lastError": "fetch failed",
+      "lastError": "",
       "isNew": false,
       "items": [
         {
@@ -54,9 +54,9 @@
       "id": "coze-dev",
       "name": "扣子开发平台",
       "officialUrl": "https://www.coze.cn/open/docs/developer_guides/changelog",
-      "lastCheckedAt": "2026-04-01T10:56:37.100Z",
+      "lastCheckedAt": "2026-04-01T11:11:09.558Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
-      "lastError": "fetch failed",
+      "lastError": "",
       "isNew": false,
       "items": [
         {
@@ -70,9 +70,9 @@
       "id": "coze",
       "name": "扣子",
       "officialUrl": "https://www.coze.cn/",
-      "lastCheckedAt": "2026-04-01T10:56:37.101Z",
+      "lastCheckedAt": "2026-04-01T11:11:09.561Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
-      "lastError": "fetch failed",
+      "lastError": "",
       "isNew": false,
       "items": [
         {
@@ -86,9 +86,9 @@
       "id": "jimeng",
       "name": "即梦",
       "officialUrl": "https://jimeng.jianying.com/",
-      "lastCheckedAt": "2026-04-01T10:56:37.103Z",
+      "lastCheckedAt": "2026-04-01T11:11:09.563Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
-      "lastError": "fetch failed",
+      "lastError": "",
       "isNew": false,
       "items": [
         {
@@ -102,9 +102,9 @@
       "id": "kling",
       "name": "可灵",
       "officialUrl": "https://klingai.com/",
-      "lastCheckedAt": "2026-04-01T10:56:37.105Z",
+      "lastCheckedAt": "2026-04-01T11:11:09.565Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
-      "lastError": "fetch failed",
+      "lastError": "",
       "isNew": false,
       "items": [
         {
