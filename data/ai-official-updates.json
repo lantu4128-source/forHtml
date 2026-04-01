@@ -1,0 +1,118 @@
+{
+  "updatedAt": "2026-04-01T10:56:37.105Z",
+  "date": "2026-04-01",
+  "tools": [
+    {
+      "id": "doubao",
+      "name": "豆包",
+      "officialUrl": "https://www.doubao.com/",
+      "lastCheckedAt": "2026-04-01T10:56:37.095Z",
+      "lastSuccessAt": "2026-04-01T10:00:00+08:00",
+      "lastError": "fetch failed",
+      "isNew": false,
+      "items": [
+        {
+          "title": "豆包大模型 2.0 发布（Pro/Lite/Mini/Code）",
+          "date": "2026-02-14",
+          "link": "https://xinwen.bjd.com.cn/content/s699016dde4b0cd719e9db090.html"
+        }
+      ]
+    },
+    {
+      "id": "yuanqi",
+      "name": "腾讯元器",
+      "officialUrl": "https://yuanqi.tencent.com/changelog/product-changelog",
+      "lastCheckedAt": "2026-04-01T10:56:37.097Z",
+      "lastSuccessAt": "2026-04-01T10:00:00+08:00",
+      "lastError": "fetch failed",
+      "isNew": false,
+      "items": [
+        {
+          "title": "升级发布页，所有发布渠道一目了然",
+          "date": "2025-10",
+          "link": "https://yuanqi.tencent.com/changelog/product-changelog"
+        }
+      ]
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek",
+      "officialUrl": "https://api-docs.deepseek.com/zh-cn/updates",
+      "lastCheckedAt": "2026-04-01T10:56:37.098Z",
+      "lastSuccessAt": "2026-04-01T10:00:00+08:00",
+      "lastError": "fetch failed",
+      "isNew": false,
+      "items": [
+        {
+          "title": "DeepSeek-V3.2（deepseek-chat / deepseek-reasoner）",
+          "date": "2025-12-01",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates"
+        }
+      ]
+    },
+    {
+      "id": "coze-dev",
+      "name": "扣子开发平台",
+      "officialUrl": "https://www.coze.cn/open/docs/developer_guides/changelog",
+      "lastCheckedAt": "2026-04-01T10:56:37.100Z",
+      "lastSuccessAt": "2026-04-01T10:00:00+08:00",
+      "lastError": "fetch failed",
+      "isNew": false,
+      "items": [
+        {
+          "title": "扣子开发平台升级至 2.0（AgentCoding / 云端开发能力）",
+          "date": "2026-01-19",
+          "link": "https://news.qq.com/rain/a/20260119A046N700"
+        }
+      ]
+    },
+    {
+      "id": "coze",
+      "name": "扣子",
+      "officialUrl": "https://www.coze.cn/",
+      "lastCheckedAt": "2026-04-01T10:56:37.101Z",
+      "lastSuccessAt": "2026-04-01T10:00:00+08:00",
+      "lastError": "fetch failed",
+      "isNew": false,
+      "items": [
+        {
+          "title": "扣子 2.0 正式上线（Skills/Plan/Office/Coding）",
+          "date": "2026-01-19",
+          "link": "https://news.qq.com/rain/a/20260119A046N700"
+        }
+      ]
+    },
+    {
+      "id": "jimeng",
+      "name": "即梦",
+      "officialUrl": "https://jimeng.jianying.com/",
+      "lastCheckedAt": "2026-04-01T10:56:37.103Z",
+      "lastSuccessAt": "2026-04-01T10:00:00+08:00",
+      "lastError": "fetch failed",
+      "isNew": false,
+      "items": [
+        {
+          "title": "即梦 App 更新至 v2.1.5（应用宝记录）",
+          "date": "2026-03-26",
+          "link": "https://sj.qq.com/appdetail/com.bytedance.dreamina"
+        }
+      ]
+    },
+    {
+      "id": "kling",
+      "name": "可灵",
+      "officialUrl": "https://klingai.com/",
+      "lastCheckedAt": "2026-04-01T10:56:37.105Z",
+      "lastSuccessAt": "2026-04-01T10:00:00+08:00",
+      "lastError": "fetch failed",
+      "isNew": false,
+      "items": [
+        {
+          "title": "可灵 AI 2.0 升级发布（语义响应/动态质量/画质提升）",
+          "date": "2025-04-15",
+          "link": "https://news.qq.com/rain/a/20250415A08O5000"
+        }
+      ]
+    }
+  ]
+}

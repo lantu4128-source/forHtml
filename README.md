@@ -30,3 +30,25 @@ It uses [Vosk Browser](https://github.com/ccoreilly/vosk-browser) to run speech 
 - Initial load time depends on internet speed (40MB download).
 - Heavy on mobile CPU/Battery.
 
+## AI Official Updates Page
+
+This repo now includes a static page to track official AI tool updates:
+
+- Page: `ai-official-updates.html`
+- Data file: `data/ai-official-updates.json`
+- Daily updater: `scripts/update-ai-updates.mjs`
+- Workflow: `.github/workflows/daily-ai-updates.yml`
+
+### How daily auto-update works
+
+- GitHub Actions runs every day and executes:
+  - `node scripts/update-ai-updates.mjs`
+- The script fetches update content and rewrites `data/ai-official-updates.json`.
+- If there is any change, Actions commits and pushes the new data automatically.
+
+You can also run it locally:
+
+```bash
+node scripts/update-ai-updates.mjs
+```
+

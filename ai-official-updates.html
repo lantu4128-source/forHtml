@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 官方更新追踪</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --panel: #fff;
+      --line: #e7e9f2;
+      --text: #1d2440;
+      --muted: #6d7393;
+      --brand: #4b57ee;
+      --ok: #0f9f68;
+      --warn: #ad6a00;
+      --bad: #b83939;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    .wrap {
+      width: min(1120px, calc(100% - 32px));
+      margin: 24px auto 40px;
+    }
+    .head {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    h1 { margin: 0; font-size: 22px; }
+    .sub { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+    .meta { color: var(--muted); font-size: 12px; }
+    .grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      min-height: 240px;
+    }
+    .row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .title { margin: 0; font-size: 16px; }
+    .badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      white-space: nowrap;
+    }
+    .badge.new { color: var(--ok); background: #ecfff7; border-color: #bdecd8; }
+    .badge.same { color: var(--warn); background: #fff7e8; border-color: #f0ddb2; }
+    .badge.err { color: var(--bad); background: #ffefef; border-color: #f2c1c1; }
+    .small { font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 8px; }
+    ul { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+    li { border: 1px solid var(--line); border-radius: 10px; padding: 8px; background: #fafbff; }
+    a { color: var(--text); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h1>AI 官方更新追踪</h1>
+        <p class="sub">GitHub Actions 每天自动抓取并更新 `data/ai-official-updates.json`。</p>
+      </div>
+      <div id="meta" class="meta">加载中...</div>
+    </div>
+    <div id="grid" class="grid"></div>
+  </div>
+
+  <script>
+    function fmt(v) {
+      if (!v) return "--";
+      const d = new Date(v);
+      if (Number.isNaN(d.getTime())) return String(v);
+      return d.toLocaleString("zh-CN", { hour12: false });
+    }
+
+    function statusOf(tool) {
+      if (tool.lastError) return { cls: "err", text: "抓取异常" };
+      if (tool.isNew) return { cls: "new", text: "有新更新" };
+      return { cls: "same", text: "保留最近更新" };
+    }
+
+    function render(data) {
+      const meta = document.getElementById("meta");
+      const grid = document.getElementById("grid");
+      meta.textContent = `上次全量更新：${fmt(data.updatedAt)} | 数据日期：${data.date || "--"}`;
+      grid.innerHTML = data.tools.map((tool) => {
+        const s = statusOf(tool);
+        const items = (tool.items || []).map((item) => `
+          <li>
+            <div><a href="${item.link || tool.officialUrl}" target="_blank" rel="noopener noreferrer">${item.title}</a></div>
+            <div class="small">${item.date || "日期未标注"}</div>
+          </li>
+        `).join("");
+        return `
+          <article class="card">
+            <div class="row">
+              <h3 class="title">${tool.name}</h3>
+              <span class="badge ${s.cls}">${s.text}</span>
+            </div>
+            <div class="small">
+              官方：<a href="${tool.officialUrl}" target="_blank" rel="noopener noreferrer">${tool.officialUrl}</a><br />
+              最近检查：${fmt(tool.lastCheckedAt)}<br />
+              最近成功：${fmt(tool.lastSuccessAt)}
+              ${tool.lastError ? `<br />提示：${tool.lastError}` : ""}
+            </div>
+            <ul>${items || "<li>暂无数据</li>"}</ul>
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function bootstrap() {
+      const res = await fetch("./data/ai-official-updates.json?t=" + Date.now());
+      if (!res.ok) throw new Error("数据文件读取失败");
+      const data = await res.json();
+      render(data);
+    }
+
+    bootstrap().catch((err) => {
+      document.getElementById("meta").textContent = `加载失败：${err.message}`;
+    });
+  </script>
+</body>
+</html>
