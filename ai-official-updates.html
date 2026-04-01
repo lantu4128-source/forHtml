@@ -75,6 +75,15 @@
     .small { font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 8px; }
     ul { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
     li { border: 1px solid var(--line); border-radius: 10px; padding: 8px; background: #fafbff; }
+    .points { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .point {
+      font-size: 11px;
+      color: #2d3565;
+      background: #eef1ff;
+      border: 1px solid #d8ddff;
+      padding: 2px 6px;
+      border-radius: 999px;
+    }
     a { color: var(--text); text-decoration: none; }
     a:hover { text-decoration: underline; }
   </style>
@@ -115,6 +124,9 @@
         const items = (tool.items || []).map((item) => `
           <li>
             <div><a href="${item.link || tool.officialUrl}" target="_blank" rel="noopener noreferrer">${item.title}</a></div>
+            <div class="points">
+              ${((item.highlights || []).slice(0, 4)).map((p) => `<span class="point">${p}</span>`).join("") || '<span class="point">暂无更新要点</span>'}
+            </div>
             <div class="small">${item.date || "日期未标注"}</div>
           </li>
         `).join("");

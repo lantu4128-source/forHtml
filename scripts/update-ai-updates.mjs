@@ -33,7 +33,7 @@ const SEEDED = {
       lastSuccessAt: "2026-04-01T10:00:00+08:00",
       lastError: "",
       isNew: false,
-      items: [{ title: "豆包大模型 2.0 发布（Pro/Lite/Mini/Code）", date: "2026-02-14", link: "https://xinwen.bjd.com.cn/content/s699016dde4b0cd719e9db090.html" }],
+      items: [{ title: "豆包大模型 2.0 发布（Pro/Lite/Mini/Code）", date: "2026-02-14", link: "https://xinwen.bjd.com.cn/content/s699016dde4b0cd719e9db090.html", highlights: ["Pro", "Lite", "Mini", "Code"] }],
     },
     {
       id: "yuanqi",
@@ -43,7 +43,7 @@ const SEEDED = {
       lastSuccessAt: "2026-04-01T10:00:00+08:00",
       lastError: "",
       isNew: false,
-      items: [{ title: "升级发布页，所有发布渠道一目了然", date: "2025-10", link: "https://yuanqi.tencent.com/changelog/product-changelog" }],
+      items: [{ title: "升级发布页，所有发布渠道一目了然", date: "2025-10", link: "https://yuanqi.tencent.com/changelog/product-changelog", highlights: ["发布页升级", "发布渠道统一展示"] }],
     },
     {
       id: "deepseek",
@@ -53,7 +53,7 @@ const SEEDED = {
       lastSuccessAt: "2026-04-01T10:00:00+08:00",
       lastError: "",
       isNew: false,
-      items: [{ title: "DeepSeek-V3.2（deepseek-chat / deepseek-reasoner）", date: "2025-12-01", link: "https://api-docs.deepseek.com/zh-cn/updates" }],
+      items: [{ title: "DeepSeek-V3.2（deepseek-chat / deepseek-reasoner）", date: "2025-12-01", link: "https://api-docs.deepseek.com/zh-cn/updates", highlights: ["deepseek-chat", "deepseek-reasoner"] }],
     },
     {
       id: "coze-dev",
@@ -63,7 +63,7 @@ const SEEDED = {
       lastSuccessAt: "2026-04-01T10:00:00+08:00",
       lastError: "官方 changelog 页面抓取超时，先使用公开报道快照",
       isNew: false,
-      items: [{ title: "扣子开发平台升级至 2.0（AgentCoding / 云端开发能力）", date: "2026-01-19", link: "https://news.qq.com/rain/a/20260119A046N700" }],
+      items: [{ title: "扣子开发平台升级至 2.0（AgentCoding / 云端开发能力）", date: "2026-01-19", link: "https://news.qq.com/rain/a/20260119A046N700", highlights: ["AgentCoding", "云端开发能力"] }],
     },
     {
       id: "coze",
@@ -73,7 +73,7 @@ const SEEDED = {
       lastSuccessAt: "2026-04-01T10:00:00+08:00",
       lastError: "",
       isNew: false,
-      items: [{ title: "扣子 2.0 正式上线（Skills/Plan/Office/Coding）", date: "2026-01-19", link: "https://news.qq.com/rain/a/20260119A046N700" }],
+      items: [{ title: "扣子 2.0 正式上线（Skills/Plan/Office/Coding）", date: "2026-01-19", link: "https://news.qq.com/rain/a/20260119A046N700", highlights: ["Skills", "Plan", "Office", "Coding"] }],
     },
     {
       id: "jimeng",
@@ -83,7 +83,7 @@ const SEEDED = {
       lastSuccessAt: "2026-04-01T10:00:00+08:00",
       lastError: "",
       isNew: false,
-      items: [{ title: "即梦 App 更新至 v2.1.5（应用宝记录）", date: "2026-03-26", link: "https://sj.qq.com/appdetail/com.bytedance.dreamina" }],
+      items: [{ title: "即梦 App 更新至 v2.1.5（应用宝记录）", date: "2026-03-26", link: "https://sj.qq.com/appdetail/com.bytedance.dreamina", highlights: ["版本 v2.1.5", "应用宝记录"] }],
     },
     {
       id: "kling",
@@ -93,13 +93,43 @@ const SEEDED = {
       lastSuccessAt: "2026-04-01T10:00:00+08:00",
       lastError: "",
       isNew: false,
-      items: [{ title: "可灵 AI 2.0 升级发布（语义响应/动态质量/画质提升）", date: "2025-04-15", link: "https://news.qq.com/rain/a/20250415A08O5000" }],
+      items: [{ title: "可灵 AI 2.0 升级发布（语义响应/动态质量/画质提升）", date: "2025-04-15", link: "https://news.qq.com/rain/a/20250415A08O5000", highlights: ["语义响应", "动态质量", "画质提升"] }],
     },
   ],
 };
 
 function normalizeLine(v) {
   return String(v || "").replace(/\s+/g, " ").trim();
+}
+
+function extractHighlightsFromTitle(title) {
+  const text = String(title || "").trim();
+  const bracket = text.match(/[（(]([^()（）]+)[)）]/);
+  if (bracket && bracket[1]) {
+    const fromBracket = bracket[1]
+      .split(/[\/、,，;；|]/)
+      .map((x) => normalizeLine(x))
+      .filter(Boolean)
+      .slice(0, 4);
+    if (fromBracket.length) return fromBracket;
+  }
+
+  const tail = text
+    .replace(/[（(][^()（）]+[)）]/g, "")
+    .split(/[，,。:：]/)
+    .map((x) => normalizeLine(x))
+    .filter(Boolean)
+    .slice(0, 2);
+  return tail.length ? tail : [];
+}
+
+function normalizeItem(item) {
+  const existing = Array.isArray(item?.highlights)
+    ? item.highlights.map((x) => normalizeLine(x)).filter(Boolean)
+    : [];
+  const generated = extractHighlightsFromTitle(item?.title || "");
+  const highlights = (existing.length ? existing : generated).slice(0, 4);
+  return { ...item, highlights };
 }
 
 function extractDate(text) {
@@ -167,7 +197,7 @@ function parseItems(text, tool) {
     const key = `${date}|${line}`;
     if (seen.has(key)) continue;
     seen.add(key);
-    out.push({ title: line, date, link: tool.officialUrl });
+    out.push(normalizeItem({ title: line, date, link: tool.officialUrl }));
     if (out.length >= MAX_ITEMS) break;
   }
 
@@ -191,7 +221,7 @@ async function main() {
 
   for (const tool of TOOL_CONFIG) {
     const oldTool = prevMap[tool.id] || {};
-    const oldItems = Array.isArray(oldTool.items) ? oldTool.items : [];
+    const oldItems = Array.isArray(oldTool.items) ? oldTool.items.map(normalizeItem) : [];
     let items = oldItems;
     let lastSuccessAt = oldTool.lastSuccessAt || "";
     let lastError = "";
