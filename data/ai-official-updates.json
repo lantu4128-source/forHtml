@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-04-01T11:16:35.969Z",
-  "date": "2026-04-01",
+  "updatedAt": "2026-04-02T04:01:53.098Z",
+  "date": "2026-04-02",
   "tools": [
     {
       "id": "doubao",
       "name": "豆包",
       "officialUrl": "https://www.doubao.com/",
-      "lastCheckedAt": "2026-04-01T11:16:35.954Z",
+      "lastCheckedAt": "2026-04-02T04:01:46.322Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -28,7 +28,7 @@
       "id": "yuanqi",
       "name": "腾讯元器",
       "officialUrl": "https://yuanqi.tencent.com/changelog/product-changelog",
-      "lastCheckedAt": "2026-04-01T11:16:35.956Z",
+      "lastCheckedAt": "2026-04-02T04:01:47.487Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -48,18 +48,49 @@
       "id": "deepseek",
       "name": "DeepSeek",
       "officialUrl": "https://api-docs.deepseek.com/zh-cn/updates",
-      "lastCheckedAt": "2026-04-01T11:16:35.959Z",
-      "lastSuccessAt": "2026-04-01T10:00:00+08:00",
+      "lastCheckedAt": "2026-04-02T04:01:48.806Z",
+      "lastSuccessAt": "2026-04-02T04:01:48.806Z",
       "lastError": "",
-      "isNew": false,
+      "isNew": true,
       "items": [
         {
-          "title": "DeepSeek-V3.2（deepseek-chat / deepseek-reasoner）",
+          "title": "<script src=\"/zh-cn/assets/js/runtime~main.6bc62b5c.js\" defer=\"defer\"></script>",
           "date": "2025-12-01",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
           "highlights": [
-            "deepseek-chat",
-            "deepseek-reasoner"
+            "<script src=\"/zh-cn/assets/js/runtime~main.6bc62b5c.js\" defer=\"defer\"></script>"
+          ]
+        },
+        {
+          "title": "<p><code>deepseek-chat</code> 和 <code>deepseek-reasoner</code> 都已升级为 DeepSeek-V3.2.</p>",
+          "date": "日期未标注",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates",
+          "highlights": [
+            "<p><code>deepseek-chat</code> 和 <code>deepseek-reasoner</code> 都已升级为 DeepSeek-V3.2.</p>"
+          ]
+        },
+        {
+          "title": "<li><code>deepseek-chat</code> 对应 DeepSeek-V3.2 的<strong>非思考模式</strong></li>",
+          "date": "日期未标注",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates",
+          "highlights": [
+            "<li><code>deepseek-chat</code> 对应 DeepSeek-V3.2 的<strong>非思考模式</strong></li>"
+          ]
+        },
+        {
+          "title": "<li><code>deepseek-reasoner</code> 对应 DeepSeek-V3.2 的<strong>思考模式</strong></li>",
+          "date": "日期未标注",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates",
+          "highlights": [
+            "<li><code>deepseek-reasoner</code> 对应 DeepSeek-V3.2 的<strong>思考模式</strong></li>"
+          ]
+        },
+        {
+          "title": "<p>详细更新内容请<a href=\"/zh-cn/news/news251201\">参阅文档</a></p>",
+          "date": "2025-12-15",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates",
+          "highlights": [
+            "<p>详细更新内容请<a href=\"/zh-cn/news/news251201\">参阅文档</a></p>"
           ]
         }
       ]
@@ -68,7 +99,7 @@
       "id": "coze-dev",
       "name": "扣子开发平台",
       "officialUrl": "https://www.coze.cn/open/docs/developer_guides/changelog",
-      "lastCheckedAt": "2026-04-01T11:16:35.962Z",
+      "lastCheckedAt": "2026-04-02T04:01:50.545Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -88,7 +119,7 @@
       "id": "coze",
       "name": "扣子",
       "officialUrl": "https://www.coze.cn/",
-      "lastCheckedAt": "2026-04-01T11:16:35.965Z",
+      "lastCheckedAt": "2026-04-02T04:01:50.977Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -110,7 +141,7 @@
       "id": "jimeng",
       "name": "即梦",
       "officialUrl": "https://jimeng.jianying.com/",
-      "lastCheckedAt": "2026-04-01T11:16:35.967Z",
+      "lastCheckedAt": "2026-04-02T04:01:52.150Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -129,7 +160,7 @@
       "id": "kling",
       "name": "可灵",
       "officialUrl": "https://klingai.com/",
-      "lastCheckedAt": "2026-04-01T11:16:35.969Z",
+      "lastCheckedAt": "2026-04-02T04:01:53.098Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
