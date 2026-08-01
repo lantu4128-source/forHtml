@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-07-31T04:44:37.824Z",
-  "date": "2026-07-31",
+  "updatedAt": "2026-08-01T04:37:20.029Z",
+  "date": "2026-08-01",
   "tools": [
     {
       "id": "doubao",
       "name": "豆包",
       "officialUrl": "https://www.doubao.com/",
-      "lastCheckedAt": "2026-07-31T04:44:29.948Z",
+      "lastCheckedAt": "2026-08-01T04:37:13.388Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -28,7 +28,7 @@
       "id": "yuanqi",
       "name": "腾讯元器",
       "officialUrl": "https://yuanqi.tencent.com/changelog/product-changelog",
-      "lastCheckedAt": "2026-07-31T04:44:31.078Z",
+      "lastCheckedAt": "2026-08-01T04:37:14.505Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -48,49 +48,53 @@
       "id": "deepseek",
       "name": "DeepSeek",
       "officialUrl": "https://api-docs.deepseek.com/zh-cn/updates",
-      "lastCheckedAt": "2026-07-31T04:44:33.119Z",
-      "lastSuccessAt": "2026-07-31T04:44:33.119Z",
+      "lastCheckedAt": "2026-08-01T04:37:15.974Z",
+      "lastSuccessAt": "2026-08-01T04:37:15.974Z",
       "lastError": "",
-      "isNew": false,
+      "isNew": true,
       "items": [
         {
-          "title": "<script src=\"/zh-cn/assets/js/runtime~main.66b1eeea.js\" defer=\"defer\"></script>",
-          "date": "2026-04-24",
+          "title": "<script src=\"/zh-cn/assets/js/runtime~main.5158d776.js\" defer=\"defer\"></script>",
+          "date": "2026-07-31",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
           "highlights": [
-            "<script src=\"/zh-cn/assets/js/runtime~main.66b1eeea.js\" defer=\"defer\"></script>"
+            "<script src=\"/zh-cn/assets/js/runtime~main.5158d776.js\" defer=\"defer\"></script>"
           ]
         },
         {
-          "title": "<p>详细更新内容请<a href=\"/zh-cn/news/news260424\">参阅文档</a></p>",
-          "date": "2026-07-24",
-          "link": "https://api-docs.deepseek.com/zh-cn/updates",
-          "highlights": [
-            "<p>详细更新内容请<a href=\"/zh-cn/news/news260424\">参阅文档</a></p>"
-          ]
-        },
-        {
-          "title": "<p><code>deepseek-chat</code> 和 <code>deepseek-reasoner</code> 都已升级为 DeepSeek-V3.2.</p>",
+          "title": "<p>DeepSeek-V4-Flash 正式版 API 上线公测，API 调用方式不变，模型名设置为 <code>deepseek-v4-flash</code> 即可使用最新版本。</p>",
           "date": "日期未标注",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
           "highlights": [
-            "<p><code>deepseek-chat</code> 和 <code>deepseek-reasoner</code> 都已升级为 DeepSeek-V3.2.</p>"
+            "<p>DeepSeek-V4-Flash 正式版 API 上线公测",
+            "API 调用方式不变"
           ]
         },
         {
-          "title": "<li><code>deepseek-chat</code> 对应 DeepSeek-V3.2 的<strong>非思考模式</strong></li>",
+          "title": "<b>DeepSeek-V4-Flash-0731 的模型结构、尺寸和 DeepSeek-V4-Flash-Preview 保持一致，仅重新进行了后训练。</b>",
           "date": "日期未标注",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
           "highlights": [
-            "<li><code>deepseek-chat</code> 对应 DeepSeek-V3.2 的<strong>非思考模式</strong></li>"
+            "<b>DeepSeek-V4-Flash-0731 的模型结构、尺寸和 DeepSeek-V4-Flash-Preview 保持一致",
+            "仅重新进行了后训练"
           ]
         },
         {
-          "title": "<li><code>deepseek-reasoner</code> 对应 DeepSeek-V3.2 的<strong>思考模式</strong></li>",
+          "title": "<b>注意：本次仅升级了 DeepSeek-V4-Flash 的 API 接口，DeepSeek-V4-Pro API 及 APP/WEB 端模型未做更改。</b>",
           "date": "日期未标注",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
           "highlights": [
-            "<li><code>deepseek-reasoner</code> 对应 DeepSeek-V3.2 的<strong>思考模式</strong></li>"
+            "<b>注意",
+            "本次仅升级了 DeepSeek-V4-Flash 的 API 接口"
+          ]
+        },
+        {
+          "title": "<b>DeepSeek-V4-Pro 正式版将会尽快发布。</b>",
+          "date": "日期未标注",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates",
+          "highlights": [
+            "<b>DeepSeek-V4-Pro 正式版将会尽快发布",
+            "</b>"
           ]
         }
       ]
@@ -99,7 +103,7 @@
       "id": "coze-dev",
       "name": "扣子开发平台",
       "officialUrl": "https://www.coze.cn/open/docs/developer_guides/changelog",
-      "lastCheckedAt": "2026-07-31T04:44:33.966Z",
+      "lastCheckedAt": "2026-08-01T04:37:17.219Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -119,7 +123,7 @@
       "id": "coze",
       "name": "扣子",
       "officialUrl": "https://www.coze.cn/",
-      "lastCheckedAt": "2026-07-31T04:44:34.321Z",
+      "lastCheckedAt": "2026-08-01T04:37:17.550Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -141,7 +145,7 @@
       "id": "jimeng",
       "name": "即梦",
       "officialUrl": "https://jimeng.jianying.com/",
-      "lastCheckedAt": "2026-07-31T04:44:36.669Z",
+      "lastCheckedAt": "2026-08-01T04:37:19.086Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -160,7 +164,7 @@
       "id": "kling",
       "name": "可灵",
       "officialUrl": "https://klingai.com/",
-      "lastCheckedAt": "2026-07-31T04:44:37.824Z",
+      "lastCheckedAt": "2026-08-01T04:37:20.029Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
