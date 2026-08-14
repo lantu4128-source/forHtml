@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-08-13T03:33:10.820Z",
-  "date": "2026-08-13",
+  "updatedAt": "2026-08-14T03:30:15.795Z",
+  "date": "2026-08-14",
   "tools": [
     {
       "id": "doubao",
       "name": "豆包",
       "officialUrl": "https://www.doubao.com/",
-      "lastCheckedAt": "2026-08-13T03:33:04.343Z",
+      "lastCheckedAt": "2026-08-14T03:30:08.726Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -28,7 +28,7 @@
       "id": "yuanqi",
       "name": "腾讯元器",
       "officialUrl": "https://yuanqi.tencent.com/changelog/product-changelog",
-      "lastCheckedAt": "2026-08-13T03:33:05.656Z",
+      "lastCheckedAt": "2026-08-14T03:30:09.878Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -48,17 +48,34 @@
       "id": "deepseek",
       "name": "DeepSeek",
       "officialUrl": "https://api-docs.deepseek.com/zh-cn/updates",
-      "lastCheckedAt": "2026-08-13T03:33:07.207Z",
-      "lastSuccessAt": "2026-08-13T03:33:07.207Z",
+      "lastCheckedAt": "2026-08-14T03:30:11.064Z",
+      "lastSuccessAt": "2026-08-14T03:30:11.064Z",
       "lastError": "",
       "isNew": true,
       "items": [
         {
-          "title": "<script src=\"/zh-cn/assets/js/runtime~main.c485338e.js\" defer=\"defer\"></script>",
-          "date": "2026-07-31",
+          "title": "<script src=\"/zh-cn/assets/js/runtime~main.b7812bd3.js\" defer=\"defer\"></script>",
+          "date": "2026-08-13",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
           "highlights": [
-            "<script src=\"/zh-cn/assets/js/runtime~main.c485338e.js\" defer=\"defer\"></script>"
+            "<script src=\"/zh-cn/assets/js/runtime~main.b7812bd3.js\" defer=\"defer\"></script>"
+          ]
+        },
+        {
+          "title": "<p>DeepSeek-V4-Pro 正式版已同步在 APP、网页端和 API 更新上线。API 调用方式不变，模型名设置为 <code>deepseek-v4-pro</code>，即可使用最新版本。</p>",
+          "date": "日期未标注",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates",
+          "highlights": [
+            "<p>DeepSeek-V4-Pro 正式版已同步在 APP、网页端和 API 更新上线",
+            "API 调用方式不变"
+          ]
+        },
+        {
+          "title": "<p>详细更新内容请<a href=\"/zh-cn/news/news260813\">参阅文档</a></p>",
+          "date": "日期未标注",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates",
+          "highlights": [
+            "<p>详细更新内容请<a href=\"/zh-cn/news/news260813\">参阅文档</a></p>"
           ]
         },
         {
@@ -78,24 +95,6 @@
             "<b>DeepSeek-V4-Flash-0731 的模型结构、尺寸和 DeepSeek-V4-Flash-Preview 保持一致",
             "仅重新进行了后训练"
           ]
-        },
-        {
-          "title": "<b>注意：本次仅升级了 DeepSeek-V4-Flash 的 API 接口，DeepSeek-V4-Pro API 及 APP/WEB 端模型未做更改。</b>",
-          "date": "日期未标注",
-          "link": "https://api-docs.deepseek.com/zh-cn/updates",
-          "highlights": [
-            "<b>注意",
-            "本次仅升级了 DeepSeek-V4-Flash 的 API 接口"
-          ]
-        },
-        {
-          "title": "<b>DeepSeek-V4-Pro 正式版将会尽快发布。</b>",
-          "date": "日期未标注",
-          "link": "https://api-docs.deepseek.com/zh-cn/updates",
-          "highlights": [
-            "<b>DeepSeek-V4-Pro 正式版将会尽快发布",
-            "</b>"
-          ]
         }
       ]
     },
@@ -103,7 +102,7 @@
       "id": "coze-dev",
       "name": "扣子开发平台",
       "officialUrl": "https://www.coze.cn/open/docs/developer_guides/changelog",
-      "lastCheckedAt": "2026-08-13T03:33:08.195Z",
+      "lastCheckedAt": "2026-08-14T03:30:11.896Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -123,7 +122,7 @@
       "id": "coze",
       "name": "扣子",
       "officialUrl": "https://www.coze.cn/",
-      "lastCheckedAt": "2026-08-13T03:33:08.419Z",
+      "lastCheckedAt": "2026-08-14T03:30:12.246Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -145,7 +144,7 @@
       "id": "jimeng",
       "name": "即梦",
       "officialUrl": "https://jimeng.jianying.com/",
-      "lastCheckedAt": "2026-08-13T03:33:09.729Z",
+      "lastCheckedAt": "2026-08-14T03:30:13.933Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -164,7 +163,7 @@
       "id": "kling",
       "name": "可灵",
       "officialUrl": "https://klingai.com/",
-      "lastCheckedAt": "2026-08-13T03:33:10.820Z",
+      "lastCheckedAt": "2026-08-14T03:30:15.795Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
