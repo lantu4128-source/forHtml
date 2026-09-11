@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-09-10T06:00:25.977Z",
-  "date": "2026-09-10",
+  "updatedAt": "2026-09-11T06:02:51.391Z",
+  "date": "2026-09-11",
   "tools": [
     {
       "id": "doubao",
       "name": "豆包",
       "officialUrl": "https://www.doubao.com/",
-      "lastCheckedAt": "2026-09-10T06:00:18.072Z",
+      "lastCheckedAt": "2026-09-11T06:02:44.280Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -28,7 +28,7 @@
       "id": "yuanqi",
       "name": "腾讯元器",
       "officialUrl": "https://yuanqi.tencent.com/changelog/product-changelog",
-      "lastCheckedAt": "2026-09-10T06:00:19.609Z",
+      "lastCheckedAt": "2026-09-11T06:02:45.101Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -48,17 +48,17 @@
       "id": "deepseek",
       "name": "DeepSeek",
       "officialUrl": "https://api-docs.deepseek.com/zh-cn/updates",
-      "lastCheckedAt": "2026-09-10T06:00:21.967Z",
-      "lastSuccessAt": "2026-09-10T06:00:21.967Z",
+      "lastCheckedAt": "2026-09-11T06:02:46.868Z",
+      "lastSuccessAt": "2026-09-11T06:02:46.868Z",
       "lastError": "",
       "isNew": true,
       "items": [
         {
-          "title": "<script src=\"/zh-cn/assets/js/runtime~main.a3fe1ce8.js\" defer=\"defer\"></script>",
+          "title": "<script src=\"/zh-cn/assets/js/runtime~main.ab4bd59f.js\" defer=\"defer\"></script>",
           "date": "2026-09-10",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
           "highlights": [
-            "<script src=\"/zh-cn/assets/js/runtime~main.a3fe1ce8.js\" defer=\"defer\"></script>"
+            "<script src=\"/zh-cn/assets/js/runtime~main.ab4bd59f.js\" defer=\"defer\"></script>"
           ]
         },
         {
@@ -80,6 +80,15 @@
           ]
         },
         {
+          "title": "<p>详细更新内容请<a href=\"/zh-cn/news/news260910\">参阅文档</a>。</p>",
+          "date": "日期未标注",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates",
+          "highlights": [
+            "<p>详细更新内容请<a href=\"/zh-cn/news/news260910\">参阅文档</a>",
+            "</p>"
+          ]
+        },
+        {
           "title": "<p>在纯文本能力（Agent、推理、世界知识等）方面，DeepSeek-V4-Flash-Vision-Exp 与 DeepSeek-V4-Flash 正式版持平。</p>",
           "date": "日期未标注",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
@@ -88,15 +97,6 @@
             "推理",
             "世界知识等"
           ]
-        },
-        {
-          "title": "<p>在需要视觉理解的 Agent Benchmark 上，DeepSeek-V4-Flash-Vision-Exp 相比 DeepSeek-V4-Flash 实现了大幅跃升，多模态 Agent 能力已接近 Opus-4.8。</p>",
-          "date": "日期未标注",
-          "link": "https://api-docs.deepseek.com/zh-cn/updates",
-          "highlights": [
-            "<p>在需要视觉理解的 Agent Benchmark 上",
-            "DeepSeek-V4-Flash-Vision-Exp 相比 DeepSeek-V4-Flash 实现了大幅跃升"
-          ]
         }
       ]
     },
@@ -104,7 +104,7 @@
       "id": "coze-dev",
       "name": "扣子开发平台",
       "officialUrl": "https://www.coze.cn/open/docs/developer_guides/changelog",
-      "lastCheckedAt": "2026-09-10T06:00:22.964Z",
+      "lastCheckedAt": "2026-09-11T06:02:48.009Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -124,7 +124,7 @@
       "id": "coze",
       "name": "扣子",
       "officialUrl": "https://www.coze.cn/",
-      "lastCheckedAt": "2026-09-10T06:00:23.309Z",
+      "lastCheckedAt": "2026-09-11T06:02:48.393Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -146,7 +146,7 @@
       "id": "jimeng",
       "name": "即梦",
       "officialUrl": "https://jimeng.jianying.com/",
-      "lastCheckedAt": "2026-09-10T06:00:24.510Z",
+      "lastCheckedAt": "2026-09-11T06:02:49.458Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -165,7 +165,7 @@
       "id": "kling",
       "name": "可灵",
       "officialUrl": "https://klingai.com/",
-      "lastCheckedAt": "2026-09-10T06:00:25.977Z",
+      "lastCheckedAt": "2026-09-11T06:02:51.391Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
