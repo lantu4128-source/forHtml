@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-09-24T06:12:12.565Z",
-  "date": "2026-09-24",
+  "updatedAt": "2026-09-25T06:10:30.121Z",
+  "date": "2026-09-25",
   "tools": [
     {
       "id": "doubao",
       "name": "豆包",
       "officialUrl": "https://www.doubao.com/",
-      "lastCheckedAt": "2026-09-24T06:12:03.256Z",
+      "lastCheckedAt": "2026-09-25T06:10:22.699Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -28,7 +28,7 @@
       "id": "yuanqi",
       "name": "腾讯元器",
       "officialUrl": "https://yuanqi.tencent.com/changelog/product-changelog",
-      "lastCheckedAt": "2026-09-24T06:12:06.285Z",
+      "lastCheckedAt": "2026-09-25T06:10:23.620Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -48,17 +48,54 @@
       "id": "deepseek",
       "name": "DeepSeek",
       "officialUrl": "https://api-docs.deepseek.com/zh-cn/updates",
-      "lastCheckedAt": "2026-09-24T06:12:06.603Z",
-      "lastSuccessAt": "2026-09-24T06:12:06.603Z",
+      "lastCheckedAt": "2026-09-25T06:10:25.027Z",
+      "lastSuccessAt": "2026-09-25T06:10:25.027Z",
       "lastError": "",
       "isNew": true,
       "items": [
         {
-          "title": "<script src=\"/assets/js/runtime~main.4637dfc3.js\" defer=\"defer\"></script>",
+          "title": "<script src=\"/zh-cn/assets/js/runtime~main.828cd90c.js\" defer=\"defer\"></script>",
+          "date": "2026-09-10",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates",
+          "highlights": [
+            "<script src=\"/zh-cn/assets/js/runtime~main.828cd90c.js\" defer=\"defer\"></script>"
+          ]
+        },
+        {
+          "title": "<p>今天，我们正式发布 DeepSeek-V4.1-Flash 模型。这是我们全新模型结构系列中的最小尺寸的模型，具备原生多模态视觉理解能力。新模型结构的设计初衷是：能力上限更高、推理速度更快、吞吐更大、可扩展到更大参数模型。</p>",
           "date": "日期未标注",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
           "highlights": [
-            "<script src=\"/assets/js/runtime~main.4637dfc3.js\" defer=\"defer\"></script>"
+            "<p>今天",
+            "我们正式发布 DeepSeek-V4.1-Flash 模型"
+          ]
+        },
+        {
+          "title": "<p>随着 DeepSeek-V4.1-Flash 上线，API 价格同步下调。详细价格请参考<a href=\"/zh-cn/quick_start/pricing\">模型与价格</a>。</p>",
+          "date": "日期未标注",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates",
+          "highlights": [
+            "<p>随着 DeepSeek-V4.1-Flash 上线",
+            "API 价格同步下调"
+          ]
+        },
+        {
+          "title": "<p>详细更新内容请<a href=\"/zh-cn/news/news260910\">参阅文档</a>。</p>",
+          "date": "日期未标注",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates",
+          "highlights": [
+            "<p>详细更新内容请<a href=\"/zh-cn/news/news260910\">参阅文档</a>",
+            "</p>"
+          ]
+        },
+        {
+          "title": "<p>在纯文本能力（Agent、推理、世界知识等）方面，DeepSeek-V4-Flash-Vision-Exp 与 DeepSeek-V4-Flash 正式版持平。</p>",
+          "date": "日期未标注",
+          "link": "https://api-docs.deepseek.com/zh-cn/updates",
+          "highlights": [
+            "Agent",
+            "推理",
+            "世界知识等"
           ]
         }
       ]
@@ -67,7 +104,7 @@
       "id": "coze-dev",
       "name": "扣子开发平台",
       "officialUrl": "https://www.coze.cn/open/docs/developer_guides/changelog",
-      "lastCheckedAt": "2026-09-24T06:12:08.019Z",
+      "lastCheckedAt": "2026-09-25T06:10:26.511Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -87,7 +124,7 @@
       "id": "coze",
       "name": "扣子",
       "officialUrl": "https://www.coze.cn/",
-      "lastCheckedAt": "2026-09-24T06:12:08.385Z",
+      "lastCheckedAt": "2026-09-25T06:10:26.880Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -109,7 +146,7 @@
       "id": "jimeng",
       "name": "即梦",
       "officialUrl": "https://jimeng.jianying.com/",
-      "lastCheckedAt": "2026-09-24T06:12:11.381Z",
+      "lastCheckedAt": "2026-09-25T06:10:28.677Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -128,7 +165,7 @@
       "id": "kling",
       "name": "可灵",
       "officialUrl": "https://klingai.com/",
-      "lastCheckedAt": "2026-09-24T06:12:12.565Z",
+      "lastCheckedAt": "2026-09-25T06:10:30.121Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
