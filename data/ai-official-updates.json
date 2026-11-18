@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-17T09:15:15.071Z",
-  "date": "2026-11-17",
+  "updatedAt": "2026-11-18T08:34:59.145Z",
+  "date": "2026-11-18",
   "tools": [
     {
       "id": "doubao",
       "name": "豆包",
       "officialUrl": "https://www.doubao.com/",
-      "lastCheckedAt": "2026-11-17T09:15:07.425Z",
+      "lastCheckedAt": "2026-11-18T08:34:51.743Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -28,7 +28,7 @@
       "id": "yuanqi",
       "name": "腾讯元器",
       "officialUrl": "https://yuanqi.tencent.com/changelog/product-changelog",
-      "lastCheckedAt": "2026-11-17T09:15:09.461Z",
+      "lastCheckedAt": "2026-11-18T08:34:53.874Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -48,17 +48,17 @@
       "id": "deepseek",
       "name": "DeepSeek",
       "officialUrl": "https://api-docs.deepseek.com/zh-cn/updates",
-      "lastCheckedAt": "2026-11-17T09:15:10.669Z",
-      "lastSuccessAt": "2026-11-17T09:15:10.669Z",
+      "lastCheckedAt": "2026-11-18T08:34:54.887Z",
+      "lastSuccessAt": "2026-11-18T08:34:54.887Z",
       "lastError": "",
       "isNew": true,
       "items": [
         {
-          "title": "<script src=\"/zh-cn/assets/js/runtime~main.42ce4421.js\" defer=\"defer\"></script>",
+          "title": "<script src=\"/zh-cn/assets/js/runtime~main.0872d768.js\" defer=\"defer\"></script>",
           "date": "2026-11-13",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
           "highlights": [
-            "<script src=\"/zh-cn/assets/js/runtime~main.42ce4421.js\" defer=\"defer\"></script>"
+            "<script src=\"/zh-cn/assets/js/runtime~main.0872d768.js\" defer=\"defer\"></script>"
           ]
         },
         {
@@ -103,7 +103,7 @@
       "id": "coze-dev",
       "name": "扣子开发平台",
       "officialUrl": "https://www.coze.cn/open/docs/developer_guides/changelog",
-      "lastCheckedAt": "2026-11-17T09:15:12.070Z",
+      "lastCheckedAt": "2026-11-18T08:34:55.839Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -123,7 +123,7 @@
       "id": "coze",
       "name": "扣子",
       "officialUrl": "https://www.coze.cn/",
-      "lastCheckedAt": "2026-11-17T09:15:12.439Z",
+      "lastCheckedAt": "2026-11-18T08:34:56.118Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -145,10 +145,10 @@
       "id": "jimeng",
       "name": "即梦",
       "officialUrl": "https://jimeng.jianying.com/",
-      "lastCheckedAt": "2026-11-17T09:15:13.980Z",
-      "lastSuccessAt": "2026-11-17T09:15:13.980Z",
+      "lastCheckedAt": "2026-11-18T08:34:58.253Z",
+      "lastSuccessAt": "2026-11-18T08:34:58.253Z",
       "lastError": "",
-      "isNew": true,
+      "isNew": false,
       "items": [
         {
           "title": "购买截止时间：2026-11-23",
@@ -165,7 +165,7 @@
       "id": "kling",
       "name": "可灵",
       "officialUrl": "https://klingai.com/",
-      "lastCheckedAt": "2026-11-17T09:15:15.071Z",
+      "lastCheckedAt": "2026-11-18T08:34:59.145Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
