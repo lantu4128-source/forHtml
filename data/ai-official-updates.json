@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-23T09:09:16.794Z",
-  "date": "2026-11-23",
+  "updatedAt": "2026-11-24T10:59:20.853Z",
+  "date": "2026-11-24",
   "tools": [
     {
       "id": "doubao",
       "name": "豆包",
       "officialUrl": "https://www.doubao.com/",
-      "lastCheckedAt": "2026-11-23T09:09:09.237Z",
+      "lastCheckedAt": "2026-11-24T10:59:10.488Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -28,7 +28,7 @@
       "id": "yuanqi",
       "name": "腾讯元器",
       "officialUrl": "https://yuanqi.tencent.com/changelog/product-changelog",
-      "lastCheckedAt": "2026-11-23T09:09:11.805Z",
+      "lastCheckedAt": "2026-11-24T10:59:12.771Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -48,8 +48,8 @@
       "id": "deepseek",
       "name": "DeepSeek",
       "officialUrl": "https://api-docs.deepseek.com/zh-cn/updates",
-      "lastCheckedAt": "2026-11-23T09:09:12.821Z",
-      "lastSuccessAt": "2026-11-23T09:09:12.821Z",
+      "lastCheckedAt": "2026-11-24T10:59:15.577Z",
+      "lastSuccessAt": "2026-11-24T10:59:15.577Z",
       "lastError": "",
       "isNew": false,
       "items": [
@@ -103,7 +103,7 @@
       "id": "coze-dev",
       "name": "扣子开发平台",
       "officialUrl": "https://www.coze.cn/open/docs/developer_guides/changelog",
-      "lastCheckedAt": "2026-11-23T09:09:13.715Z",
+      "lastCheckedAt": "2026-11-24T10:59:16.804Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -123,7 +123,7 @@
       "id": "coze",
       "name": "扣子",
       "officialUrl": "https://www.coze.cn/",
-      "lastCheckedAt": "2026-11-23T09:09:14.125Z",
+      "lastCheckedAt": "2026-11-24T10:59:17.221Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -145,18 +145,18 @@
       "id": "jimeng",
       "name": "即梦",
       "officialUrl": "https://jimeng.jianying.com/",
-      "lastCheckedAt": "2026-11-23T09:09:15.719Z",
-      "lastSuccessAt": "2026-11-23T09:09:15.719Z",
+      "lastCheckedAt": "2026-11-24T10:59:19.027Z",
+      "lastSuccessAt": "2026-11-24T10:59:19.027Z",
       "lastError": "",
-      "isNew": false,
+      "isNew": true,
       "items": [
         {
-          "title": "购买截止时间：2026-11-23",
-          "date": "2026-11-23",
+          "title": "购买截止时间：2026-11-30",
+          "date": "2026-11-30",
           "link": "https://jimeng.jianying.com/",
           "highlights": [
             "购买截止时间",
-            "2026-11-23"
+            "2026-11-30"
           ]
         }
       ]
@@ -165,7 +165,7 @@
       "id": "kling",
       "name": "可灵",
       "officialUrl": "https://klingai.com/",
-      "lastCheckedAt": "2026-11-23T09:09:16.794Z",
+      "lastCheckedAt": "2026-11-24T10:59:20.853Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
