@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-26T09:34:42.963Z",
-  "date": "2026-11-26",
+  "updatedAt": "2026-11-27T09:42:49.356Z",
+  "date": "2026-11-27",
   "tools": [
     {
       "id": "doubao",
       "name": "豆包",
       "officialUrl": "https://www.doubao.com/",
-      "lastCheckedAt": "2026-11-26T09:34:35.347Z",
+      "lastCheckedAt": "2026-11-27T09:42:40.319Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -28,7 +28,7 @@
       "id": "yuanqi",
       "name": "腾讯元器",
       "officialUrl": "https://yuanqi.tencent.com/changelog/product-changelog",
-      "lastCheckedAt": "2026-11-26T09:34:37.274Z",
+      "lastCheckedAt": "2026-11-27T09:42:42.906Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -48,17 +48,17 @@
       "id": "deepseek",
       "name": "DeepSeek",
       "officialUrl": "https://api-docs.deepseek.com/zh-cn/updates",
-      "lastCheckedAt": "2026-11-26T09:34:38.760Z",
-      "lastSuccessAt": "2026-11-26T09:34:38.760Z",
+      "lastCheckedAt": "2026-11-27T09:42:44.657Z",
+      "lastSuccessAt": "2026-11-27T09:42:44.657Z",
       "lastError": "",
-      "isNew": false,
+      "isNew": true,
       "items": [
         {
-          "title": "<script src=\"/zh-cn/assets/js/runtime~main.65d66d8b.js\" defer=\"defer\"></script>",
+          "title": "<script src=\"/zh-cn/assets/js/runtime~main.2c861ed7.js\" defer=\"defer\"></script>",
           "date": "2026-11-13",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
           "highlights": [
-            "<script src=\"/zh-cn/assets/js/runtime~main.65d66d8b.js\" defer=\"defer\"></script>"
+            "<script src=\"/zh-cn/assets/js/runtime~main.2c861ed7.js\" defer=\"defer\"></script>"
           ]
         },
         {
@@ -80,7 +80,7 @@
           ]
         },
         {
-          "title": "<p>随着 DeepSeek-V4.1-Flash 上线，API 价格同步下调。详细价格请参考<a href=\"/zh-cn/quick_start/pricing\">模型与价格</a>。</p>",
+          "title": "<p>随着 DeepSeek-V4.1-Flash 上线，API 价格同步下调。详细价格请参考<a href=\"/zh-cn/quick_start/pricing/\">模型与价格</a>。</p>",
           "date": "日期未标注",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
           "highlights": [
@@ -89,11 +89,11 @@
           ]
         },
         {
-          "title": "<p>详细更新内容请<a href=\"/zh-cn/news/news260910\">参阅文档</a>。</p>",
+          "title": "<p>详细更新内容请<a href=\"/zh-cn/news/news260910/\">参阅文档</a>。</p>",
           "date": "日期未标注",
           "link": "https://api-docs.deepseek.com/zh-cn/updates",
           "highlights": [
-            "<p>详细更新内容请<a href=\"/zh-cn/news/news260910\">参阅文档</a>",
+            "<p>详细更新内容请<a href=\"/zh-cn/news/news260910/\">参阅文档</a>",
             "</p>"
           ]
         }
@@ -103,7 +103,7 @@
       "id": "coze-dev",
       "name": "扣子开发平台",
       "officialUrl": "https://www.coze.cn/open/docs/developer_guides/changelog",
-      "lastCheckedAt": "2026-11-26T09:34:39.838Z",
+      "lastCheckedAt": "2026-11-27T09:42:46.288Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -123,7 +123,7 @@
       "id": "coze",
       "name": "扣子",
       "officialUrl": "https://www.coze.cn/",
-      "lastCheckedAt": "2026-11-26T09:34:40.276Z",
+      "lastCheckedAt": "2026-11-27T09:42:46.632Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -145,8 +145,8 @@
       "id": "jimeng",
       "name": "即梦",
       "officialUrl": "https://jimeng.jianying.com/",
-      "lastCheckedAt": "2026-11-26T09:34:41.706Z",
-      "lastSuccessAt": "2026-11-26T09:34:41.706Z",
+      "lastCheckedAt": "2026-11-27T09:42:48.641Z",
+      "lastSuccessAt": "2026-11-27T09:42:48.641Z",
       "lastError": "",
       "isNew": false,
       "items": [
@@ -165,7 +165,7 @@
       "id": "kling",
       "name": "可灵",
       "officialUrl": "https://klingai.com/",
-      "lastCheckedAt": "2026-11-26T09:34:42.963Z",
+      "lastCheckedAt": "2026-11-27T09:42:49.356Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
