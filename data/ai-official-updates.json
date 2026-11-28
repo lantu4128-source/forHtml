@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-27T09:42:49.356Z",
-  "date": "2026-11-27",
+  "updatedAt": "2026-11-28T08:55:55.582Z",
+  "date": "2026-11-28",
   "tools": [
     {
       "id": "doubao",
       "name": "豆包",
       "officialUrl": "https://www.doubao.com/",
-      "lastCheckedAt": "2026-11-27T09:42:40.319Z",
+      "lastCheckedAt": "2026-11-28T08:55:48.074Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -28,7 +28,7 @@
       "id": "yuanqi",
       "name": "腾讯元器",
       "officialUrl": "https://yuanqi.tencent.com/changelog/product-changelog",
-      "lastCheckedAt": "2026-11-27T09:42:42.906Z",
+      "lastCheckedAt": "2026-11-28T08:55:49.716Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -48,10 +48,10 @@
       "id": "deepseek",
       "name": "DeepSeek",
       "officialUrl": "https://api-docs.deepseek.com/zh-cn/updates",
-      "lastCheckedAt": "2026-11-27T09:42:44.657Z",
-      "lastSuccessAt": "2026-11-27T09:42:44.657Z",
+      "lastCheckedAt": "2026-11-28T08:55:51.160Z",
+      "lastSuccessAt": "2026-11-28T08:55:51.160Z",
       "lastError": "",
-      "isNew": true,
+      "isNew": false,
       "items": [
         {
           "title": "<script src=\"/zh-cn/assets/js/runtime~main.2c861ed7.js\" defer=\"defer\"></script>",
@@ -103,7 +103,7 @@
       "id": "coze-dev",
       "name": "扣子开发平台",
       "officialUrl": "https://www.coze.cn/open/docs/developer_guides/changelog",
-      "lastCheckedAt": "2026-11-27T09:42:46.288Z",
+      "lastCheckedAt": "2026-11-28T08:55:52.519Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -123,7 +123,7 @@
       "id": "coze",
       "name": "扣子",
       "officialUrl": "https://www.coze.cn/",
-      "lastCheckedAt": "2026-11-27T09:42:46.632Z",
+      "lastCheckedAt": "2026-11-28T08:55:52.787Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
@@ -145,11 +145,20 @@
       "id": "jimeng",
       "name": "即梦",
       "officialUrl": "https://jimeng.jianying.com/",
-      "lastCheckedAt": "2026-11-27T09:42:48.641Z",
-      "lastSuccessAt": "2026-11-27T09:42:48.641Z",
+      "lastCheckedAt": "2026-11-28T08:55:54.529Z",
+      "lastSuccessAt": "2026-11-28T08:55:54.529Z",
       "lastError": "",
-      "isNew": false,
+      "isNew": true,
       "items": [
+        {
+          "title": "无限用活动于11月27日加码，新增 Seedance 2.5 Flash、Seedance 2.0 mini、Seedance 2.0 Fast 三款模型，",
+          "date": "日期未标注",
+          "link": "https://jimeng.jianying.com/",
+          "highlights": [
+            "无限用活动于11月27日加码",
+            "新增 Seedance 2.5 Flash、Seedance 2.0 mini、Seedance 2.0 Fast 三款模型"
+          ]
+        },
         {
           "title": "购买截止时间：2026-11-30",
           "date": "2026-11-30",
@@ -165,7 +174,7 @@
       "id": "kling",
       "name": "可灵",
       "officialUrl": "https://klingai.com/",
-      "lastCheckedAt": "2026-11-27T09:42:49.356Z",
+      "lastCheckedAt": "2026-11-28T08:55:55.582Z",
       "lastSuccessAt": "2026-04-01T10:00:00+08:00",
       "lastError": "",
       "isNew": false,
